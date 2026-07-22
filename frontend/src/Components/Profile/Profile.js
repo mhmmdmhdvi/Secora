@@ -1,115 +1,181 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { authFetch } from "../Auth/authFetch";
 import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/useAuth";
+import { getResponseErrorMessage } from "../../services/apiClient";
+import { Button, Card, Field, LanguageToggle, ThemeToggle } from "../UI";
+import { useTranslation } from "react-i18next";
 
 function Profile() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const { t } = useTranslation();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const passwordControllerRef = useRef(null);
+  const deleteControllerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      passwordControllerRef.current?.abort();
+      deleteControllerRef.current?.abort();
+    };
+  }, []);
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      toast.warning("Passwords do not match");
+      toast.warning(t("auth.passwordsDoNotMatch"));
       return;
     }
 
+    if (isChangingPassword) {
+      return;
+    }
+
+    passwordControllerRef.current?.abort();
+    passwordControllerRef.current = new AbortController();
+    setIsChangingPassword(true);
+
     try {
-      const response = await authFetch("/api/accounts/change-password/", {
+      const response = await authFetch("/accounts/change-password/", {
         method: "POST",
+        signal: passwordControllerRef.current.signal,
         body: JSON.stringify({ new_password: newPassword }),
       });
 
       if (response.ok) {
-        toast.success("Password updated successfully");
+        toast.success(t("profile.passwordUpdated"));
         setNewPassword("");
         setConfirmPassword("");
       } else {
-        toast.error("Something went wrong");
+        const message = await getResponseErrorMessage(
+          response,
+          t("profile.passwordUpdateFailed")
+        );
+        toast.error(message);
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      if (error?.name !== "AbortError") {
+        toast.error(t("profile.passwordUpdateFailed"));
+      }
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure you want to delete your account?")) return;
+    if (!window.confirm(t("profile.deleteConfirm"))) return;
+
+    if (isDeletingAccount) {
+      return;
+    }
+
+    deleteControllerRef.current?.abort();
+    deleteControllerRef.current = new AbortController();
+    setIsDeletingAccount(true);
 
     try {
-      const response = await authFetch("/api/accounts/delete-account/", {
+      const response = await authFetch("/accounts/delete-account/", {
         method: "DELETE",
+        signal: deleteControllerRef.current.signal,
       });
 
       if (response.ok) {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        window.dispatchEvent(new Event("storage"));
-        window.location.href = "/";
+        logout();
+        navigate("/");
       } else {
-        toast.error("Error deleting account");
+        const message = await getResponseErrorMessage(
+          response,
+          t("profile.deleteFailed")
+        );
+        toast.error(message);
       }
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        toast.error(t("profile.deleteFailed"));
+      }
+    } finally {
+      setIsDeletingAccount(false);
     }
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto md:ml-0 md:mr-auto py-4 sm:py-6">
-      <div className="bg-white border border-gray-300 rounded-lg p-5 sm:p-6 mb-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-gray-900">Password</h2>
-        <p className="text-gray-600 mt-1 mb-4">
-          Set or update your account password.
+    <div className="w-full max-w-3xl mx-auto md:ms-0 md:me-auto py-4 sm:py-6">
+      <Card className="p-5 sm:p-6 mb-6">
+        <h2 className="text-xl font-semibold text-text">{t("profile.appearance")}</h2>
+        <p className="text-text-muted mt-1 mb-4">
+          {t("profile.appearanceDescription")}
+        </p>
+
+        <div className="flex flex-col gap-5">
+          <div>
+            <p className="mb-2 text-sm font-medium text-text">{t("profile.theme")}</p>
+            <ThemeToggle />
+          </div>
+
+          <div>
+            <p className="mb-2 text-sm font-medium text-text">{t("profile.language")}</p>
+            <LanguageToggle />
+          </div>
+        </div>
+      </Card>
+
+      <Card className="p-5 sm:p-6 mb-6">
+        <h2 className="text-xl font-semibold text-text">{t("profile.password")}</h2>
+        <p className="text-text-muted mt-1 mb-4">
+          {t("profile.passwordDescription")}
         </p>
 
         <form onSubmit={handlePasswordChange} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label className="text-gray-700 font-medium">New password</label>
-            <input
-              type="password"
-              className="border border-gray-300 rounded-md px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
+          <Field
+            label={t("profile.newPassword")}
+            id="profile-new-password"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
 
-          <div className="flex flex-col gap-1">
-            <label className="text-gray-700 font-medium">
-              Confirm password
-            </label>
-            <input
-              type="password"
-              className="border border-gray-300 rounded-md px-3 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
+          <Field
+            label={t("profile.confirmPassword")}
+            id="profile-confirm-password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
 
-          <button
+          <Button
             type="submit"
-            className="w-full sm:w-32 px-4 py-2.5 bg-gray-900 text-white rounded-md hover:bg-black transition"
+            className="w-full sm:w-32"
+            variant="secondary"
+            disabled={isChangingPassword}
           >
-            Save
-          </button>
+            {isChangingPassword ? t("profile.saving") : t("profile.save")}
+          </Button>
         </form>
-      </div>
+      </Card>
 
-      <div className="bg-white border border-gray-300 rounded-lg p-5 sm:p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-gray-900">Delete account</h2>
-        <p className="text-gray-600 mt-1 mb-4 max-w-xl leading-7">
-          No longer want to use our service? You can delete your account here.
-          This action is not reversible. All information related to this account
-          will be deleted permanently.
+      <Card className="p-5 sm:p-6">
+        <h2 className="text-xl font-semibold text-text">{t("profile.deleteAccount")}</h2>
+        <p className="text-text-muted mt-1 mb-4 max-w-xl leading-7">
+          {t("profile.deleteDescription")}
         </p>
 
-        <button
+        <Button
           onClick={handleDeleteAccount}
-          className="w-full sm:w-40 px-4 py-2.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+          className="w-full sm:w-40"
+          variant="danger"
+          disabled={isDeletingAccount}
         >
-          Delete account
-        </button>
-      </div>
+          {isDeletingAccount ? t("profile.deleting") : t("profile.deleteAccount")}
+        </Button>
+      </Card>
     </div>
   );
 }

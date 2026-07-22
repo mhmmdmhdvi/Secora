@@ -1,0 +1,34 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div id="content-main">
+  <p>
+    You are about to publish <strong>{{ original }}</strong>. Publishing runs
+    the lesson readiness checks, marks this revision as published, retires the
+    previous published revision for this lesson, and invalidates published
+    lesson caches after the database transaction commits.
+  </p>
+
+  {% if publish_errors %}
+    <p class="errornote">This revision is not ready to publish.</p>
+    <ul>
+      {% for field, messages in publish_errors.items %}
+        <li>
+          <strong>{{ field }}</strong>: {{ messages|join:", " }}
+        </li>
+      {% endfor %}
+    </ul>
+    <p>
+      <a href="{% url 'admin:lessons_lessonrevision_change' original.pk %}">Return to revision</a>
+    </p>
+  {% else %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="submit-row">
+        <input type="submit" value="Publish revision" class="default">
+        <a href="{% url 'admin:lessons_lessonrevision_change' original.pk %}" class="closelink">Cancel</a>
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

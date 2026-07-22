@@ -1,6 +1,15 @@
+import { apiV1Url } from "../../services/apiClient";
+import {
+  clearAuthTokens,
+  getAuthTokens,
+  setAuthTokens,
+} from "../../services/authTokens";
+
+let refreshAccessTokenPromise = null;
+
 export async function authFetch(url, options = {}) {
-  let access = localStorage.getItem("access");
-  const refresh = localStorage.getItem("refresh");
+  const { access, refresh } = getAuthTokens();
+  const requestUrl = apiV1Url(url);
 
   options.headers = {
     ...options.headers,
@@ -8,34 +17,43 @@ export async function authFetch(url, options = {}) {
     Authorization: `Bearer ${access}`,
   };
 
-  let response = await fetch(url, options);
+  let response = await fetch(requestUrl, options);
 
-  // If access token expired
   if (response.status === 401 && refresh) {
-    const refreshResponse = await fetch("/api/token/refresh/", {
+    const newAccessToken = await refreshAccessToken(refresh);
+
+    if (newAccessToken) {
+      options.headers.Authorization = `Bearer ${newAccessToken}`;
+      response = await fetch(requestUrl, options);
+    }
+  }
+
+  return response;
+}
+
+async function refreshAccessToken(refresh) {
+  if (!refreshAccessTokenPromise) {
+    refreshAccessTokenPromise = fetch(apiV1Url("/token/refresh/"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ refresh }),
-    });
+    })
+      .then(async (refreshResponse) => {
+        if (!refreshResponse.ok) {
+          clearAuthTokens();
+          return null;
+        }
 
-    if (refreshResponse.ok) {
-      const data = await refreshResponse.json();
-
-      // Save new access token
-      localStorage.setItem("access", data.access);
-
-      // Retry original request with new token
-      options.headers.Authorization = `Bearer ${data.access}`;
-      response = await fetch(url, options);
-    } else {
-      // Refresh failed → logout
-      localStorage.removeItem("access");
-      localStorage.removeItem("refresh");
-      window.location.href = "/login";
-    }
+        const data = await refreshResponse.json();
+        setAuthTokens({ access: data.access });
+        return data.access;
+      })
+      .finally(() => {
+        refreshAccessTokenPromise = null;
+      });
   }
 
-  return response;
+  return refreshAccessTokenPromise;
 }

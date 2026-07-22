@@ -1,0 +1,114 @@
+{
+  "app": {
+    "name": "SecureLearn",
+    "loading": "Loading SecureLearn"
+  },
+  "nav": {
+    "home": "Home",
+    "lessons": "Lessons",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar"
+  },
+  "landing": {
+    "titleLine1": "Learn the attacks",
+    "titleLine2": "Defend your code",
+    "description": "Free interactive secure code lessons covering the OWASP Top 10 and emerging AI vulnerabilities. Learn how to prevent SQL injection, prompt injection, cross-site scripting, and more real world attacks. Expert-written, 15-30 minutes each.",
+    "browseLessons": "Browse All Lessons"
+  },
+  "auth": {
+    "username": "Username",
+    "usernamePlaceholder": "Username",
+    "email": "Email",
+    "emailPlaceholder": "Email",
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "Confirm Password",
+    "captchaAnswer": "Answer",
+    "login": "Login",
+    "loggingIn": "Logging in...",
+    "signUp": "Sign Up",
+    "creatingAccount": "Creating account...",
+    "newUser": "New user?",
+    "registerHere": "Register here",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginHere": "Login here",
+    "loggedIn": "Logged in successfully",
+    "invalidCredentials": "Invalid credentials",
+    "serverError": "Server error",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "captchaIncorrect": "Captcha incorrect",
+    "accountCreated": "Account created successfully!",
+    "registrationFailed": "Registration failed"
+  },
+  "profile": {
+    "appearance": "Appearance",
+    "appearanceDescription": "Choose how SecureLearn looks on this device.",
+    "theme": "Theme",
+    "language": "Language",
+    "password": "Password",
+    "passwordDescription": "Set or update your account password.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "saving": "Saving...",
+    "save": "Save",
+    "deleteAccount": "Delete account",
+    "deleteDescription": "No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently.",
+    "deleteConfirm": "Are you sure you want to delete your account?",
+    "deleting": "Deleting...",
+    "passwordUpdated": "Password updated successfully",
+    "passwordUpdateFailed": "Could not update password",
+    "deleteFailed": "Error deleting account"
+  },
+  "theme": {
+    "selection": "Theme selection. Current theme: {{theme}}.",
+    "light": "Light",
+    "dark": "Dark",
+    "lightAria": "Light theme",
+    "darkAria": "Dark theme"
+  },
+  "language": {
+    "selection": "Language selection. Current language: {{language}}.",
+    "fa": "فارسی",
+    "en": "English"
+  },
+  "lessons": {
+    "explore": "Explore Lessons",
+    "searchLabel": "Search lessons",
+    "searchPlaceholder": "Search lesson catalog",
+    "noResultsTitle": "No lessons found",
+    "noResultsDescription": "Try a different search term.",
+    "exploreLesson": "Explore Lesson",
+    "notFoundTitle": "Lesson Not Found",
+    "notFoundDescription": "The lesson you're looking for doesn't exist or hasn't been created yet.",
+    "backToLessons": "Back to Lessons",
+    "loadingSql": "Loading SQL Injection lesson...",
+    "loadingSqlGuide": "Loading SQL Injection guide...",
+    "loadingSqlQuiz": "Loading SQL Injection quiz...",
+    "sqlLoadError": "Could not load the SQL Injection lesson",
+    "loadingXssi": "Loading XSSI lesson...",
+    "loadingXssiGuide": "Loading XSSI guide...",
+    "loadingXssiQuiz": "Loading XSSI quiz...",
+    "xssiLoadError": "Could not load the XSSI lesson"
+  },
+  "quiz": {
+    "score": "You scored {{score}} out of {{total}}",
+    "passed": "You passed the quiz!",
+    "backToLessons": "Go back to lessons",
+    "tryAgain": "Try again",
+    "neverMind": "Never mind",
+    "question": "Question",
+    "trueFalsePrefix": "True or False: "
+  },
+  "state": {
+    "somethingWentWrong": "Something went wrong",
+    "pleaseTryAgain": "Please try again.",
+    "tryAgain": "Try again",
+    "routeError": "This page could not be loaded. Please try again, or go back to the lessons page."
+  }
+}

@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
 
-function TerminalBox() {
-  const lines = [
-    { text: "Initializing SecureLearn Data Harvester...", color: "#8be9fd" },
-    { text: "Connecting to target -> vuln.site:443", color: "#f1fa8c" },
-    { text: "Running vulnerability scan...", color: "#8be9fd" },
-    { text: "[+] Port 80 open", color: "#50fa7b" },
-    { text: "[+] Port 443 open", color: "#50fa7b" },
-    { text: "[!] Possible SQL injection at /login", color: "#ff5555" },
-    { text: "Crafting payload: ' OR 1=1 --", color: "#ff79c6" },
-    { text: "Sending payload...", color: "#8be9fd" },
-    { text: "Response: HTTP 200 OK", color: "#50fa7b" },
-    { text: "[+] Login bypass successful", color: "#50fa7b" },
-    { text: "[*] Lesson: sanitize user inputs", color: "#f1fa8c" },
-  ];
+const TERMINAL_LINES = [
+  { text: "Initializing SecureLearn Data Harvester...", color: "#8be9fd" },
+  { text: "Connecting to target -> vuln.site:443", color: "#f1fa8c" },
+  { text: "Running vulnerability scan...", color: "#8be9fd" },
+  { text: "[+] Port 80 open", color: "#50fa7b" },
+  { text: "[+] Port 443 open", color: "#50fa7b" },
+  { text: "[!] Possible SQL injection at /login", color: "#ff5555" },
+  { text: "Crafting payload: ' OR 1=1 --", color: "#ff79c6" },
+  { text: "Sending payload...", color: "#8be9fd" },
+  { text: "Response: HTTP 200 OK", color: "#50fa7b" },
+  { text: "[+] Login bypass successful", color: "#50fa7b" },
+  { text: "[*] Lesson: sanitize user inputs", color: "#f1fa8c" },
+];
 
+function TerminalBox() {
   const [displayLines, setDisplayLines] = useState([]);
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
 
   useEffect(() => {
-    if (lineIndex >= lines.length) return;
+    if (lineIndex >= TERMINAL_LINES.length) return;
 
-    const currentLine = lines[lineIndex];
+    const currentLine = TERMINAL_LINES[lineIndex];
 
     if (charIndex < currentLine.text.length) {
       const timeout = setTimeout(() => {
@@ -53,7 +53,10 @@ function TerminalBox() {
   }, [charIndex, lineIndex]);
 
   return (
-    <div className="w-full max-w-[584px] min-h-[320px] sm:min-h-[380px] lg:min-h-[494px] bg-[#282a36] rounded-2xl border-[3px] border-[#44475a] overflow-hidden font-mono shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
+    <div
+      dir="ltr"
+      className="w-full max-w-[584px] min-h-[320px] sm:min-h-[380px] lg:min-h-[494px] bg-[#282a36] rounded-2xl border-[3px] border-[#44475a] overflow-hidden font-mono text-left shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+    >
       {/* HEADER */}
       <div className="bg-[#44475a] h-10 flex items-center justify-between px-3 sm:px-4">
         <div className="flex gap-1.5 shrink-0">

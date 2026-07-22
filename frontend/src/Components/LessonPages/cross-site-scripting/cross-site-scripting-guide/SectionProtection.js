@@ -1,4 +1,4 @@
-import TerminalBox from "../../SQLInjection/sql-injection-guide/TerminalBox";
+import TerminalBox from "../../shared/TerminalBox";
 
 export default function SectionProtection() {
   return (
@@ -7,19 +7,19 @@ export default function SectionProtection() {
 
         {/* Title */}
         <div className="flex items-center gap-3 mb-6">
-          <span className="text-3xl text-gray-700" aria-hidden="true">🛡️</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-500">Protection</h2>
+          <span className="text-3xl text-text-muted" aria-hidden="true">🛡️</span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-text-muted">Protection</h2>
         </div>
 
         {/* Intro box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
-          <p className="text-lg font-semibold text-gray-900">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 dark:bg-blue-950/40 dark:border-blue-800">
+          <p className="text-lg font-semibold text-text">
             To protect against stored XSS attacks, make sure any dynamic content coming
             from the data store cannot be used to inject JavaScript on a page.
           </p>
         </div>
 
-        <div className="text-black text-base sm:text-lg leading-relaxed space-y-5 sm:space-y-6">
+        <div className="text-text text-base sm:text-lg leading-relaxed space-y-5 sm:space-y-6">
 
           <p><strong>Escape Dynamic Content</strong></p>
 
@@ -47,33 +47,33 @@ export default function SectionProtection() {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full border border-gray-300 text-left text-sm sm:text-base">
-              <thead className="bg-gray-100">
+            <table className="w-full border border-border text-left text-sm sm:text-base">
+              <thead className="bg-surface-muted">
                 <tr>
-                  <th className="border px-4 py-2">Character</th>
-                  <th className="border px-4 py-2">Encoding</th>
+                  <th className="border border-border px-4 py-2">Character</th>
+                  <th className="border border-border px-4 py-2">Encoding</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border px-4 py-2">&lt;</td>
-                  <td className="border px-4 py-2">&amp;#60</td>
+                  <td className="border border-border px-4 py-2">&lt;</td>
+                  <td className="border border-border px-4 py-2">&amp;#60</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">&gt;</td>
-                  <td className="border px-4 py-2">&amp;#62</td>
+                  <td className="border border-border px-4 py-2">&gt;</td>
+                  <td className="border border-border px-4 py-2">&amp;#62</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">&amp;</td>
-                  <td className="border px-4 py-2">&amp;#38</td>
+                  <td className="border border-border px-4 py-2">&amp;</td>
+                  <td className="border border-border px-4 py-2">&amp;#38</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">"</td>
-                  <td className="border px-4 py-2">&amp;#34</td>
+                  <td className="border border-border px-4 py-2">"</td>
+                  <td className="border border-border px-4 py-2">&amp;#34</td>
                 </tr>
                 <tr>
-                  <td className="border px-4 py-2">'</td>
-                  <td className="border px-4 py-2">&amp;#39</td>
+                  <td className="border border-border px-4 py-2">'</td>
+                  <td className="border border-border px-4 py-2">&amp;#39</td>
                 </tr>
               </tbody>
             </table>

@@ -6,20 +6,20 @@ export default function SectionRisks() {
         {/* Title with warning icon */}
         <div className="flex items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
           <span className="text-2xl sm:text-3xl" aria-hidden="true">⚠️</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-500">
+          <h2 className="text-2xl sm:text-3xl font-bold text-text-muted">
             Risks
           </h2>
         </div>
 
         {/* Blue question box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 sm:p-6 mb-4 text-left shadow-sm">
-          <p className="text-base sm:text-lg font-medium text-blue-900">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 sm:p-6 mb-4 text-left shadow-sm dark:bg-blue-950/40 dark:border-blue-800">
+          <p className="text-base sm:text-lg font-medium text-blue-900 dark:text-blue-100">
             What could a determined hacker do when exploiting a XSS vulnerability?
           </p>
         </div>
 
         {/* Main content */}
-        <div className="text-black text-base sm:text-lg leading-relaxed space-y-3 sm:space-y-4">
+        <div className="text-text text-base sm:text-lg leading-relaxed space-y-3 sm:space-y-4">
           <p>
             XSS allows arbitrary execution of JavaScript code, so the damage that
             can be done by an attacker depends on the sensitivity of the data being handled by your site.

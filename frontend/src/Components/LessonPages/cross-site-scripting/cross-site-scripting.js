@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { navigateTo } from "../../../services/navigation";
 import vicBaking from "../../../assets/lessons/vic-baking.png";
 import malPensive from "../../../assets/lessons/mal-pensive.png";
 
@@ -127,11 +128,11 @@ function CrossSiteScripting() {
       <div className="flex flex-col items-center gap-6">
         {/* Text Box */}
         <div
-  className="w-full max-w-2xl p-5 sm:p-6 bg-white border rounded-2xl cursor-pointer
-  border-black active:scale-[0.98] transition touch-manipulation relative"
+  className="w-full max-w-2xl p-5 sm:p-6 bg-surface text-text border rounded-2xl cursor-pointer
+  border-border active:scale-[0.98] transition touch-manipulation relative"
   onClick={() => {
     if (step === 6) {
-      window.location.href = "/lessons/cross-site-scripting-guide";
+      navigateTo("/lessons/cross-site-scripting-guide");
     } else {
       nextStep();
     }
@@ -192,7 +193,7 @@ function CrossSiteScripting() {
 
           </div>
 
-          <span className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 text-gray-400 text-sm sm:text-base">
+          <span className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 text-text-muted text-sm sm:text-base">
             →
           </span>
         </div>

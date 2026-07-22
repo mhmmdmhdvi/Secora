@@ -11,7 +11,7 @@ export default function SectionOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-12 mb-6 sm:mb-8 w-full max-w-3xl">
 
         {/* Prevalence */}
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm">
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm dark:bg-orange-950/40 dark:border-orange-800">
           <div className="text-3xl sm:text-4xl mb-2 sm:mb-4">📊</div>
           <p className="text-sm sm:text-lg font-semibold">Prevalence</p>
           <p className="text-orange-600 font-bold text-sm sm:text-base">
@@ -20,7 +20,7 @@ export default function SectionOverview() {
         </div>
 
         {/* Exploitability */}
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm dark:bg-red-950/40 dark:border-red-800">
           <div className="text-3xl sm:text-4xl mb-2 sm:mb-4">💣</div>
           <p className="text-sm sm:text-lg font-semibold">Exploitability</p>
           <p className="text-red-600 font-bold text-sm sm:text-base">
@@ -29,7 +29,7 @@ export default function SectionOverview() {
         </div>
 
         {/* Impact */}
-        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm dark:bg-rose-950/40 dark:border-rose-800">
           <div className="text-3xl sm:text-4xl mb-2 sm:mb-4">🔥</div>
           <p className="text-sm sm:text-lg font-semibold">Impact</p>
           <p className="text-rose-600 font-bold text-sm sm:text-base">
@@ -40,7 +40,7 @@ export default function SectionOverview() {
       </div>
 
       {/* Description */}
-      <div className="max-w-4xl px-4 sm:px-0 text-black text-base sm:text-lg leading-relaxed space-y-5 sm:space-y-6 text-left">
+      <div className="max-w-4xl px-4 sm:px-0 text-text text-base sm:text-lg leading-relaxed space-y-5 sm:space-y-6 text-left">
         <p>
           <strong>Cross‑site scripting</strong> (XSS) is one of the most common methods hackers use to attack websites. 
           XSS vulnerabilities permit a malicious user to execute arbitrary chunks of JavaScript when other users visit your site.

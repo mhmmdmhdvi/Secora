@@ -1,34 +1,52 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Layout from "./Components/Layout/Layout";
-import ToastProvider from "./Components/UI/ToastProvider";
+import AppProviders from "./app/AppProviders";
+import ProtectedRoute from "./app/ProtectedRoute";
+import RouteErrorBoundary from "./app/RouteErrorBoundary";
+import RouteLoading from "./app/RouteLoading";
 
-import LandingPage from "./Components/LandingPage/LandingPage";
-import LessonsPage from "./Components/LessonsPage/LessonsPage";
-import LessonLoader from "./Components/LessonPages/LessonLoader";
-import Login from "./Components/Auth/Login";
-import SignUp from "./Components/Auth/SignUp";
-import ScrollToTop from "./Components/ScrollToTop";
-import Profile from "./Components/Profile/Profile"
+const LandingPage = lazy(() => import("./Components/LandingPage/LandingPage"));
+const LessonsPage = lazy(() => import("./Components/LessonsPage/LessonsPage"));
+const LessonLoader = lazy(() => import("./Components/LessonPages/LessonLoader"));
+const Login = lazy(() => import("./Components/Auth/Login"));
+const SignUp = lazy(() => import("./Components/Auth/SignUp"));
+const Profile = lazy(() => import("./Components/Profile/Profile"));
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <ToastProvider />
-
+    <AppProviders>
       <Layout>
+        <AppRoutes />
+      </Layout>
+    </AppProviders>
+  );
+}
+
+function AppRoutes() {
+  const location = useLocation();
+
+  return (
+    <RouteErrorBoundary resetKey={location.pathname}>
+      <Suspense fallback={<RouteLoading />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/lessons" element={<LessonsPage />} />
           <Route path="/lessons/:slug" element={<LessonLoader />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-      </Layout>
-    </Router>
+      </Suspense>
+    </RouteErrorBoundary>
   );
 }
 

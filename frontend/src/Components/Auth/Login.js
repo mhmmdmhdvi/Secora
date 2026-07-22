@@ -1,81 +1,108 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { apiV1Url, getApiErrorMessage, requestJson } from "../../services/apiClient";
+import { useAuth } from "../../hooks/useAuth";
+import { Button, Card, Field } from "../UI";
+import { useTranslation } from "react-i18next";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+  const { t } = useTranslation();
+  const redirectTo = location.state?.from?.pathname || "/lessons";
+  const requestControllerRef = useRef(null);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    return () => requestControllerRef.current?.abort();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) {
+      return;
+    }
+
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = new AbortController();
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
+      const data = await requestJson(apiV1Url("/token/"), {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        signal: requestControllerRef.current.signal,
         body: JSON.stringify({
           username,
           password,
         }),
       });
 
-      const data = await response.json();
+      login({ access: data.access, refresh: data.refresh });
 
-      if (response.ok) {
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
-        window.dispatchEvent(new Event("storage"));
-
-        toast.success("Logged in successfully");
-        navigate("/lessons");
-      } else {
-        toast.warning("Invalid credentials");
-      }
+      toast.success(t("auth.loggedIn"));
+      navigate(redirectTo, { replace: true });
     } catch (error) {
-      toast.error("Server error");
+      const message =
+        error?.status === 401
+          ? t("auth.invalidCredentials")
+          : getApiErrorMessage(error, t("auth.serverError"));
+
+      if (message) {
+        toast.error(message);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-start justify-center px-4 pt-24 sm:pt-28">
-      <div className="w-full max-w-md border-2 border-gray-800 rounded-xl p-6 sm:p-8 shadow-sm">
+    <div className="min-h-screen bg-app flex items-start justify-center px-4 pt-24 sm:pt-28">
+      <Card className="w-full max-w-md border-2 border-border p-6 sm:p-8">
         <h1 className="text-3xl font-bold text-center mb-6">SecureLearn</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
+          <Field
+            label={t("auth.username")}
+            id="login-username"
             type="text"
-            placeholder="Username"
-            className="border border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder={t("auth.usernamePlaceholder")}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
 
-          <input
+          <Field
+            label={t("auth.password")}
+            id="login-password"
             type="password"
-            placeholder="Password"
-            className="border border-gray-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder={t("auth.passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          <button className="bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium">
-            Login
-          </button>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? t("auth.loggingIn") : t("auth.login")}
+          </Button>
         </form>
 
-        <p className="text-center mt-6 text-sm sm:text-base">
-          New user?{" "}
-          <Link to="/signup" className="text-blue-600 font-semibold">
-            Register here
+        <p className="text-center mt-6 text-sm sm:text-base text-text-muted">
+          {t("auth.newUser")}{" "}
+          <Link to="/signup" className="text-primary font-semibold hover:text-primary-hover">
+            {t("auth.registerHere")}
           </Link>
         </p>
-      </div>
+      </Card>
     </div>
   );
 }
