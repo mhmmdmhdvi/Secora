@@ -3,7 +3,7 @@ import { mapApiLessonToXSSILesson } from "./xssiApiMapper";
 test("maps an XSSI API payload into the interactive, guide, and quiz shape", () => {
   const lesson = mapApiLessonToXSSILesson(apiLessonPayload());
 
-  expect(lesson.title).toBe("Cross‑Site Script Inclusion (XSSI)");
+  expect(lesson.title).toBe("Cross-Site Script Inclusion (XSSI)");
   expect(lesson.totalSteps).toBe(3);
   expect(lesson.finalStep).toBe(2);
   expect(lesson.steps).toHaveLength(2);
@@ -14,9 +14,37 @@ test("maps an XSSI API payload into the interactive, guide, and quiz shape", () 
   expect(lesson.quiz.questions[0].answer).toBe(0);
 });
 
+test("prefers localized simulation state from block content", () => {
+  const payload = apiLessonPayload();
+  const simulation = payload.sections[0].blocks.find(
+    (block) => block.key === "xssi-demo"
+  );
+
+  simulation.content = {
+    initial_state: {
+      ...simulation.config.initial_state,
+      origin_table: {
+        intro: "فقط این URLها هم‌مبدأ هستند:",
+        body: "URL هم‌مبدأ؟",
+      },
+      quiz_intro: {
+        ...simulation.config.initial_state.quiz_intro,
+        title: "آزمون: XSSI",
+        start_button: "شروع آزمون",
+      },
+    },
+  };
+
+  const lesson = mapApiLessonToXSSILesson(payload);
+
+  expect(lesson.originTable.intro).toBe("فقط این URLها هم‌مبدأ هستند:");
+  expect(lesson.quizIntro.title).toBe("آزمون: XSSI");
+  expect(lesson.quizIntro.startButton).toBe("شروع آزمون");
+});
+
 function apiLessonPayload() {
   return {
-    title: "Cross‑Site Script Inclusion (XSSI)",
+    title: "Cross-Site Script Inclusion (XSSI)",
     sections: [
       {
         key: "interactive-demo",

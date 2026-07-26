@@ -15,9 +15,9 @@
     "collapseSidebar": "جمع کردن نوار کناری"
   },
   "landing": {
-    "titleLine1": "حمله‌ها را یاد بگیر",
+    "titleLine1": "حمله‌ها رو یاد بگیر",
     "titleLine2": "از کدت دفاع کن",
-    "description": "درس‌های تعاملی و رایگان برای کدنویسی امن؛ از OWASP Top 10 تا آسیب‌پذیری‌های تازه در هوش مصنوعی. یاد بگیر چطور جلوی SQL Injection، Prompt Injection، Cross-Site Scripting و حمله‌های واقعی دیگر را بگیری. هر درس توسط متخصص نوشته شده و حدود ۱۵ تا ۳۰ دقیقه زمان می‌برد.",
+    "description": "درس‌های تعاملی و رایگان برای کدنویسی امن؛ از OWASP Top 10 تا آسیب‌پذیری‌های تازه در هوش مصنوعی. یاد بگیر چطور جلوی SQL Injection، Prompt Injection، Cross-Site Scripting و حمله‌های واقعی دیگه رو بگیری. هر درس توسط متخصص نوشته شده و حدود ۱۵ تا ۳۰ دقیقه زمان میبره.",
     "browseLessons": "دیدن همه درس‌ها"
   },
   "auth": {
@@ -48,17 +48,17 @@
   },
   "profile": {
     "appearance": "ظاهر",
-    "appearanceDescription": "ظاهر SecureLearn را روی این دستگاه انتخاب کن.",
+    "appearanceDescription": "ظاهر دلخواهت رو انتخاب کن",
     "theme": "تم",
     "language": "زبان",
     "password": "رمز عبور",
-    "passwordDescription": "رمز عبور حسابت را تنظیم یا به‌روزرسانی کن.",
+    "passwordDescription": "رمز عبور حسابت رو عوض کن",
     "newPassword": "رمز عبور جدید",
     "confirmPassword": "تکرار رمز عبور",
     "saving": "در حال ذخیره...",
     "save": "ذخیره",
     "deleteAccount": "حذف حساب",
-    "deleteDescription": "اگر دیگر نمی‌خواهی از این سرویس استفاده کنی، می‌توانی حسابت را حذف کنی. این کار قابل بازگشت نیست و همه اطلاعات مربوط به این حساب برای همیشه حذف می‌شود.",
+    "deleteDescription": "اگه دیگه نمی‌خوای از این سرویس استفاده کنی، می‌تونی حسابت رو حذف کنی. این کار قابل بازگشت نیست و همه اطلاعات مربوط به این حساب برای همیشه حذف می‌شه",
     "deleteConfirm": "مطمئنی می‌خواهی حسابت را حذف کنی؟",
     "deleting": "در حال حذف...",
     "passwordUpdated": "رمز عبور با موفقیت به‌روزرسانی شد",
@@ -78,27 +78,27 @@
     "en": "English"
   },
   "lessons": {
-    "explore": "کاوش درس‌ها",
+    "explore": "درس‌ها",
     "searchLabel": "جست‌وجوی درس‌ها",
     "searchPlaceholder": "جست‌وجو در فهرست درس‌ها",
     "noResultsTitle": "درسی پیدا نشد",
-    "noResultsDescription": "عبارت جست‌وجوی دیگری را امتحان کن.",
+    "noResultsDescription": "عبارت جست‌وجوی دیگه ای رو امتحان کن",
     "exploreLesson": "ورود به درس",
     "notFoundTitle": "درس پیدا نشد",
-    "notFoundDescription": "درسی که دنبالش هستی وجود ندارد یا هنوز ساخته نشده است.",
+    "notFoundDescription": "درسی که دنبالش هستی وجود نداره یا هنوز ساخته نشده",
     "backToLessons": "بازگشت به درس‌ها",
-    "loadingSql": "در حال بارگذاری درس SQL Injection...",
-    "loadingSqlGuide": "در حال بارگذاری راهنمای SQL Injection...",
-    "loadingSqlQuiz": "در حال بارگذاری آزمون SQL Injection...",
+    "loadingSql": "در حال بارگذاری درس SQL Injection",
+    "loadingSqlGuide": "در حال بارگذاری راهنمای SQL Injection",
+    "loadingSqlQuiz": "در حال بارگذاری آزمون SQL Injection",
     "sqlLoadError": "درس SQL Injection بارگذاری نشد",
-    "loadingXssi": "در حال بارگذاری درس XSSI...",
-    "loadingXssiGuide": "در حال بارگذاری راهنمای XSSI...",
-    "loadingXssiQuiz": "در حال بارگذاری آزمون XSSI...",
+    "loadingXssi": "در حال بارگذاری درس XSSI",
+    "loadingXssiGuide": "در حال بارگذاری راهنمای XSSI",
+    "loadingXssiQuiz": "در حال بارگذاری آزمون XSSI",
     "xssiLoadError": "درس XSSI بارگذاری نشد"
   },
   "quiz": {
     "score": "امتیاز تو {{score}} از {{total}} بود",
-    "passed": "آزمون را با موفقیت گذراندی!",
+    "passed": "آزمون رو با موفقیت گذروندی!",
     "backToLessons": "بازگشت به درس‌ها",
     "tryAgain": "تلاش دوباره",
     "neverMind": "فعلاً نه",
@@ -150,7 +150,7 @@
     "Ai-Bias-and-Unreliability": "مدل‌های هوش مصنوعی می‌توانند سوگیری، خطا و پاسخ‌های غیرقابل اتکا داشته باشند؛ باید برای کنترل و کاهش ریسک آن‌ها طراحی کرد."
   },
   "state": {
-    "somethingWentWrong": "مشکلی پیش آمد",
+    "somethingWentWrong": "مشکلی پیش اومد",
     "pleaseTryAgain": "لطفاً دوباره تلاش کن.",
     "tryAgain": "تلاش دوباره",
     "routeError": "این صفحه بارگذاری نشد. لطفاً دوباره تلاش کن یا به صفحه درس‌ها برگرد."

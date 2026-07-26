@@ -10,7 +10,10 @@ export function mapApiLessonToXSSILesson(apiLesson) {
   const simulation = requiredBlock(blocks, "xssi-demo");
   const completion = requiredBlock(blocks, "completion");
   const guideBlock = requiredBlock(guide.blocks || [], "xssi-guide");
-  const initialState = simulation.config.initial_state;
+  const initialState =
+    simulation.content?.initial_state ||
+    simulation.content?.initialState ||
+    simulation.config.initial_state;
 
   return {
     title: apiLesson.title,

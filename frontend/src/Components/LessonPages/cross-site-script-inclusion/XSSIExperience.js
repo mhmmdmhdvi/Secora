@@ -1,10 +1,19 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { XSSIRichText } from "./XSSIRichText";
+import { normalizeLanguage } from "../../../i18n";
 import { navigateTo } from "../../../services/navigation";
 
 function XSSIExperience({ lesson }) {
+  const { i18n } = useTranslation();
+  const isPersian = normalizeLanguage(i18n.language) === "fa";
   const [step, setStep] = useState(0);
+  const textPaddingClass = isPersian ? "pl-6" : "pr-6";
+  const arrowPositionClass = isPersian
+    ? "left-3 sm:left-4"
+    : "right-3 sm:right-4";
+  const arrow = isPersian ? "←" : "→";
 
   const nextStep = () => {
     if (step < lesson.finalStep) setStep(step + 1);
@@ -50,12 +59,14 @@ function XSSIExperience({ lesson }) {
             border-border active:scale-[0.98] transition touch-manipulation relative"
             onClick={nextStep}
           >
-            <p className="leading-7 text-sm sm:text-base pr-6">
+            <p className={`leading-7 text-sm sm:text-base ${textPaddingClass}`}>
               <XSSIRichText parts={lesson.steps[step] || []} />
             </p>
 
-            <span className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 text-text-muted text-sm sm:text-base">
-              →
+            <span
+              className={`absolute ${arrowPositionClass} bottom-3 sm:bottom-4 text-text-muted text-sm sm:text-base`}
+            >
+              {arrow}
             </span>
           </div>
 
