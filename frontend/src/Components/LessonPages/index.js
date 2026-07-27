@@ -31,6 +31,12 @@ const lessonComponents = {
       "./cross-site-scripting/cross-site-scripting-guide/cross-site-scripting-guide"
     )
   ),
+  "cross-site-scripting-quiz": lazy(() =>
+    import("./cross-site-scripting/CrossSiteScriptingQuiz")
+  ),
+  "cross-site-scripting-quiz-start": lazy(() =>
+    import("./cross-site-scripting/CrossSiteScriptingQuizStart")
+  ),
 };
 
 export default lessonComponents;

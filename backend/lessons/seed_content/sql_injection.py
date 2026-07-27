@@ -243,16 +243,9 @@ FA_LESSON = {
         "balance_message": "موجودی فعلی حساب تو",
         "transfer_button": "شروع انتقال وجه",
     },
-    "logs": {
-        "initialized": "برنامه آماده شد.",
-        "attempting_login": "کاربر در حال تلاش برای ورود است...",
-        "invalid_prefix": "SQL نامعتبر:",
-        "sql_comment_detected": "کامنت SQL شناسایی شد: --",
-        "authenticated": "احراز هویت با موفقیت انجام شد.",
-    },
+    "logs": LESSON["logs"],
     "query": {
         **LESSON["query"],
-        "title": "کوئری SQL",
     },
     "completion": [
         {"type": "strong", "text": "خب، نفس راحت!"},
@@ -329,7 +322,7 @@ FA_LESSON = {
         [
             {"type": "strong", "text": "رمز عبور"},
             {"type": "text", "text": " "},
-            {"type": "muted", "text": " password'"},
+            {"type": "muted", "text": "password'"},
             {"type": "text", "text": " را وارد کن و پنجره کد را نگاه کن."},
         ],
         [

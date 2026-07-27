@@ -15,6 +15,7 @@ export function mapApiLessonToSQLInjectionLesson(apiLesson) {
   requireInitialState(initialState);
 
   return {
+    slug: apiLesson.slug,
     title: apiLesson.title,
     totalSteps: stepBlocks.length + 1,
     finalStep: stepBlocks.length,
@@ -167,6 +168,7 @@ function mapQuiz(apiQuiz) {
   const questions = apiQuiz.questions.map((question) => {
     const correctIndex = question.answers.findIndex((answer) => answer.isCorrect);
     return {
+      key: question.key,
       type: question.answers.length === 2 ? "truefalse" : "multi",
       text: question.prompt,
       options: question.answers.map((answer) => answer.text),

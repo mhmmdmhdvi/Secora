@@ -39,7 +39,7 @@ GUIDE = {
                     "parts": [
                         {
                             "type": "text",
-                            "text": "JavaScript files are not subject to the same-origin policy in browsers in the same way that other content types (like JSON and HTML) are. This allows JavaScript files to be included from different domains, but also creates an opportunity for attackers to steal sensitive data written inside those files.",
+                            "text": "JavaScript files are not subject to the same-origin policy in browsers in the same way that other content types, like JSON and HTML, are. This allows JavaScript files to be included from different domains, but also creates an opportunity for attackers to steal sensitive data written inside those files.",
                         }
                     ],
                 },
@@ -71,7 +71,7 @@ GUIDE = {
                     "parts": [
                         {
                             "type": "text",
-                            "text": "To avoid XSSI attacks, do not interpolate sensitive data directly into JavaScript files. Instead, load state using JSON endpoints or encode data in HTML where the browser’s same-origin policy provides protection. Below are safe examples showing how to initialize page state in React and Angular by loading configuration from a JSON URL.",
+                            "text": "To avoid XSSI attacks, do not interpolate sensitive data directly into JavaScript files. Instead, load state using JSON endpoints or encode data in HTML where the browser's same-origin policy provides protection. Below are safe examples showing how to initialize page state in React and Angular by loading configuration from a JSON URL.",
                         }
                     ],
                 }
@@ -133,4 +133,101 @@ export class ConfigService {
             "path": "/lessons/cross-site-script-inclusion-quiz",
         },
     },
+}
+
+FA_GUIDE = {
+    **GUIDE,
+    "overview": {
+        "title": "Cross-Site Script Inclusion (XSSI)",
+        "metrics": [
+            {"icon": "📊", "label": "چقدر رایج است:", "value": "گاه‌به‌گاه", "tone": "orange"},
+            {"icon": "💣", "label": "سوءاستفاده از آن:", "value": "آسان", "tone": "red"},
+            {"icon": "🔥", "label": "شدت آسیب:", "value": "زیاد", "tone": "orange"},
+        ],
+        "paragraphs": [
+            [
+                {
+                    "type": "text",
+                    "text": "حمله Cross-Site Script Inclusion یا XSSI زمانی رخ می‌دهد که یک سایت مخرب، فایل JavaScript را از یک دامنه دیگر وارد کند و بتواند اطلاعات حساسی مثل مشخصات کاربر را از داخل همان اسکریپت بیرون بکشد.",
+                }
+            ]
+        ],
+    },
+    "sections": [
+        {
+            "icon": "⚠️",
+            "title": "ریسک‌ها",
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "text": "اگر وب‌سایت تو داده‌های حساس را داخل فایل‌های JavaScript نگه دارد، مهاجم می‌تواند کاربر را به بازدید از یک سایت مخرب ترغیب کند؛ آن سایت اسکریپت تو را وارد می‌کند و هر داده حساسی را که داخل آن قرار گرفته باشد جمع‌آوری می‌کند.",
+                        }
+                    ],
+                }
+            ],
+        },
+        {
+            "title": "ساختار یک حمله XSSI",
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "text": "فایل‌های JavaScript در مرورگرها مثل پاسخ‌هایی مانند JSON و HTML تحت همان سطح از محدودیت سیاست هم‌مبدأ قرار نمی‌گیرند. همین موضوع باعث می‌شود اسکریپت‌ها بتوانند از دامنه‌های مختلف وارد شوند؛ اما هم‌زمان فرصتی برای مهاجم ایجاد می‌کند تا داده‌های حساس نوشته‌شده داخل آن فایل‌ها را بدزدد.",
+                        }
+                    ],
+                },
+                {
+                    "type": "paragraph",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "text": "توسعه‌دهنده‌ها در برنامه‌های تک‌صفحه‌ای یا SPA گاهی state را مستقیم داخل فایل‌های JavaScript قرار می‌دهند تا اسکریپت قبل از گرفتن داده‌های بیشتر، اطلاعات اولیه لازم را داشته باشد. مشکل اینجاست که هر وب‌سایتی می‌تواند فایل‌های JavaScript خروجی تو را با یک تگ <script> ساده وارد کند.",
+                        }
+                    ],
+                },
+                {
+                    "type": "paragraph",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "text": "یک سایت مخرب می‌تواند bundleهای JavaScript تو را وارد کند، داده‌های حساس جاسازی‌شده داخل آن‌ها را جمع کند، و حتی با گذاشتن لینک در بخش نظرات سایت واقعی تو، قربانی‌ها را به سمت صفحه مخرب بکشاند.",
+                        }
+                    ],
+                },
+            ],
+        },
+        {
+            "title": "روش کاهش خطر",
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "parts": [
+                        {
+                            "type": "text",
+                            "text": "برای جلوگیری از XSSI، داده‌های حساس را مستقیم داخل فایل‌های JavaScript تزریق نکن. به‌جای آن، state را از endpointهای JSON بارگذاری کن یا داده‌ها را در HTML به شکلی قرار بده که سیاست هم‌مبدأ مرورگر از آن محافظت کند. نمونه‌های زیر نشان می‌دهند چطور در React و Angular، وضعیت اولیه صفحه را با دریافت تنظیمات از یک URL JSON بارگذاری کنیم.",
+                        }
+                    ],
+                }
+            ],
+        },
+    ],
+    "code_samples": {
+        **GUIDE["code_samples"],
+        "quiz_cta": {
+            **GUIDE["code_samples"]["quiz_cta"],
+            "eyebrow": "یاد گرفتی؟",
+            "label": "آزمون:",
+            "summary": "یک آزمون کوتاه بده تا مطمئن شوی نکته‌ها را خوب گرفته‌ای ←",
+        },
+    },
+}
+
+GUIDE_TRANSLATIONS = {
+    "en": GUIDE,
+    "fa": FA_GUIDE,
 }

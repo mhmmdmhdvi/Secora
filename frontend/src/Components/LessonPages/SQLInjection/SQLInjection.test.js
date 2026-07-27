@@ -1,10 +1,23 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
+import { AuthProvider } from "../../../contexts/AuthContext";
+import { clearAuthTokens, setAuthTokens } from "../../../services/authTokens";
 import SQLInjectionExperience from "./SQLInjectionExperience";
 import { mapApiLessonToSQLInjectionLesson } from "./sqlInjectionApiMapper";
 
+const originalFetch = global.fetch;
+
+beforeEach(() => {
+  clearAuthTokens();
+});
+
+afterEach(() => {
+  clearAuthTokens();
+  global.fetch = originalFetch;
+});
+
 test("renders the original SQL Injection lesson experience", () => {
-  render(<SQLInjectionExperience lesson={testLesson()} />);
+  renderLesson();
 
   expect(screen.getByRole("heading", { name: "SQL Injection" })).toBeInTheDocument();
   expect(
@@ -14,7 +27,7 @@ test("renders the original SQL Injection lesson experience", () => {
 });
 
 test("preserves the original successful SQL injection interaction", () => {
-  render(<SQLInjectionExperience lesson={testLesson()} />);
+  renderLesson();
 
   fireEvent.click(screen.getByLabelText("Go to step 11"));
 
@@ -26,6 +39,78 @@ test("preserves the original successful SQL injection interaction", () => {
   expect(screen.getByText("Authentication successful.")).toBeInTheDocument();
 });
 
+test("accepts the step 11 SQL injection payload when pasted with smart punctuation", () => {
+  renderLesson();
+
+  fireEvent.click(screen.getByLabelText("Go to step 11"));
+
+  const fields = screen.getAllByRole("textbox");
+  fireEvent.change(fields[0], { target: { value: " user@email.com " } });
+  fireEvent.change(fields[1], { target: { value: "\u2019 or 1=1\u2013-" } });
+  fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+
+  expect(screen.getByText("Authentication successful.")).toBeInTheDocument();
+});
+
+test("treats the step 11 injection as successful even when the email is different", () => {
+  renderLesson();
+
+  fireEvent.click(screen.getByLabelText("Go to step 11"));
+
+  const fields = screen.getAllByRole("textbox");
+  fireEvent.change(fields[0], { target: { value: "user@gmail.com" } });
+  fireEvent.change(fields[1], { target: { value: "' or 1=1--" } });
+  fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+
+  expect(screen.getByText("Authentication successful.")).toBeInTheDocument();
+});
+
+test("resumes and saves SQL Injection progress for authenticated users", async () => {
+  setAuthTokens({ access: "access-token", refresh: "refresh-token" });
+  global.fetch = jest
+    .fn()
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ currentStep: 10 }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ currentStep: 10 }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    )
+    .mockResolvedValue(
+      new Response(JSON.stringify({ currentStep: 11 }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    );
+
+  renderLesson();
+
+  await waitFor(() => {
+    expect(screen.getByText("Step 11")).toBeInTheDocument();
+  });
+
+  fireEvent.click(screen.getByText("Step 11"));
+
+  await waitFor(() => {
+    expect(global.fetch).toHaveBeenCalledWith(
+      "/api/v1/learning/progress/sql-injection/",
+      expect.objectContaining({
+        method: "PATCH",
+        body: JSON.stringify({
+          currentStep: 11,
+          totalSteps: 14,
+          interactiveCompleted: false,
+        }),
+      })
+    );
+  });
+});
+
 test("keeps SQL Injection content mapped to the original step and quiz counts", () => {
   const lesson = testLesson();
 
@@ -34,8 +119,17 @@ test("keeps SQL Injection content mapped to the original step and quiz counts", 
   expect(lesson.quiz.questions).toHaveLength(3);
 });
 
+function renderLesson(lesson = testLesson()) {
+  return render(
+    <AuthProvider>
+      <SQLInjectionExperience lesson={lesson} />
+    </AuthProvider>
+  );
+}
+
 function testLesson() {
   return mapApiLessonToSQLInjectionLesson({
+    slug: "sql-injection",
     title: "SQL Injection",
     sections: [
       {

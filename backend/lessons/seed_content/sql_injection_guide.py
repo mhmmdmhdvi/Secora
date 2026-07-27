@@ -581,18 +581,18 @@ FA_GUIDE = {
         "metrics": [
             {
                 **GUIDE["overview"]["metrics"][0],
-                "label": "رواج",
+                "label": "چقدر رایج است",
                 "value": "گاه‌به‌گاه",
             },
             {
                 **GUIDE["overview"]["metrics"][1],
-                "label": "قابلیت سوءاستفاده",
+                "label": "سوءاستفاده از آن",
                 "value": "آسان",
             },
             {
                 **GUIDE["overview"]["metrics"][2],
-                "label": "اثر",
-                "value": "ویرانگر",
+                "label": "شدت آسیب",
+                "value": "زیاد",
             },
         ],
         "paragraphs": [
@@ -898,7 +898,7 @@ FA_GUIDE = {
         "intro": "نمونه‌کدهای زیر چند روش خوب و بد برای محافظت در برابر SQL Injection را نشان می‌دهند.",
         "quiz_cta": {
             **GUIDE["code_samples"]["quiz_cta"],
-            "eyebrow": "همه را گرفتی؟",
+            "eyebrow": "یاد گرفتی؟",
             "label": "آزمون:",
             "summary": "یک آزمون کوتاه بده تا مطمئن شوی نکته‌ها را خوب گرفته‌ای ←",
         },

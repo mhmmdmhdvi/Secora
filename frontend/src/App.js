@@ -10,6 +10,7 @@ import RouteLoading from "./app/RouteLoading";
 const LandingPage = lazy(() => import("./Components/LandingPage/LandingPage"));
 const LessonsPage = lazy(() => import("./Components/LessonsPage/LessonsPage"));
 const LessonLoader = lazy(() => import("./Components/LessonPages/LessonLoader"));
+const LearningPathsPage = lazy(() => import("./Components/LearningPaths/LearningPathsPage"));
 const Login = lazy(() => import("./Components/Auth/Login"));
 const SignUp = lazy(() => import("./Components/Auth/SignUp"));
 const Profile = lazy(() => import("./Components/Profile/Profile"));
@@ -34,6 +35,14 @@ function AppRoutes() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/lessons" element={<LessonsPage />} />
           <Route path="/lessons/:slug" element={<LessonLoader />} />
+          <Route
+            path="/paths"
+            element={
+              <ProtectedRoute>
+                <LearningPathsPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route

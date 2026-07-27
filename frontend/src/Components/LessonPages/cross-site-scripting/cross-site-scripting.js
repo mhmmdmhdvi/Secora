@@ -1,11 +1,21 @@
 import { useState, useEffect } from "react";
+import { useAppLanguage } from "../../../hooks/useAppLanguage";
 import { navigateTo } from "../../../services/navigation";
 import vicBaking from "../../../assets/lessons/vic-baking.png";
 import malPensive from "../../../assets/lessons/mal-pensive.png";
+import {
+  BREDDIT_DEMO_COPY,
+  XSS_LESSON_STEPS,
+} from "./crossSiteScriptingContent";
 
 // Helper component to avoid repeating the website UI code
-const BredditBox = ({ isAttacker = false, currentStep }) => {
+const BredditBox = ({ isAttacker = false, currentStep, isPersian = false }) => {
   const [inputText, setInputText] = useState("");
+  const copy = BREDDIT_DEMO_COPY[isPersian ? "fa" : "en"];
+  const isScriptInput =
+    (isAttacker && (currentStep === 4 || currentStep === 5)) ||
+    inputText.trimStart().startsWith("<script");
+  const inputDirection = isScriptInput ? "ltr" : isPersian ? "rtl" : "ltr";
 
   const step4Payload = "<script>alert('Your croissants are limp and sad')</script>";
   const step5Payload =
@@ -59,36 +69,41 @@ const BredditBox = ({ isAttacker = false, currentStep }) => {
 
       {/* Page Content */}
       <div className="flex-1 bg-gray-50 p-4 overflow-y-auto border border-gray-400">
-        <h2 className="font-bold text-lg mb-4 text-gray-800 border-b border-gray-200 pb-2">
-          How much do you folks like bread?
+        <h2
+          dir={isPersian ? "rtl" : "ltr"}
+          className={`font-bold text-lg mb-4 text-gray-800 border-b border-gray-200 pb-2 ${
+            isPersian ? "text-right" : "text-left"
+          }`}
+        >
+          {copy.threadTitle}
         </h2>
 
         <div className="flex flex-col gap-4">
-          {/* Message 1 */}
-          <div className="border border-black bg-white rounded-xl p-3 shadow-sm">
-            <div className="font-semibold text-blue-600 text-xs mb-1">
-              roll_with_it
+          {copy.comments.map((comment) => (
+            <div
+              key={comment.author}
+              dir={isPersian ? "rtl" : "ltr"}
+              className={`border border-black bg-white rounded-xl p-3 shadow-sm ${
+                isPersian ? "text-right" : "text-left"
+              }`}
+            >
+              <div className="font-semibold text-blue-600 text-xs mb-1" dir="ltr">
+                {comment.author}
+              </div>
+              <div className="text-gray-700 text-sm">{comment.text}</div>
             </div>
-            <div className="text-gray-700 text-sm">i dream of baking tins.</div>
-          </div>
-
-          {/* Message 2 */}
-          <div className="border border-black bg-white rounded-xl p-3 shadow-sm">
-            <div className="font-semibold text-blue-600 text-xs mb-1">
-              k_knead_you_right_now
-            </div>
-            <div className="text-gray-700 text-sm">
-              i love it so much, i think i might be part duck
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Footer input */}
       <div className="border-t border-gray-300 bg-white p-3">
         <textarea
-          className="w-full border border-gray-300 rounded-lg p-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-blue-400"
-          placeholder="Type a comment..."
+          className={`w-full border border-gray-300 rounded-lg p-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 ${
+            inputDirection === "ltr" ? "text-left" : "text-right"
+          }`}
+          placeholder={copy.placeholder}
+          dir={inputDirection}
           rows={2}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -100,6 +115,9 @@ const BredditBox = ({ isAttacker = false, currentStep }) => {
 
 function CrossSiteScripting() {
   const [step, setStep] = useState(0);
+  const { language } = useAppLanguage();
+  const isPersian = language === "fa";
+  const lessonSteps = XSS_LESSON_STEPS[isPersian ? "fa" : "en"];
 
   const nextStep = () => {
     if (step < 6) setStep(step + 1);
@@ -128,73 +146,30 @@ function CrossSiteScripting() {
       <div className="flex flex-col items-center gap-6">
         {/* Text Box */}
         <div
-  className="w-full max-w-2xl p-5 sm:p-6 bg-surface text-text border rounded-2xl cursor-pointer
-  border-border active:scale-[0.98] transition touch-manipulation relative"
-  onClick={() => {
-    if (step === 6) {
-      navigateTo("/lessons/cross-site-scripting-guide");
-    } else {
-      nextStep();
-    }
-  }}
->
+          className={`w-full max-w-2xl p-5 sm:p-6 bg-surface text-text border rounded-2xl cursor-pointer
+          border-border active:scale-[0.98] transition touch-manipulation relative ${
+            isPersian ? "text-right" : "text-left"
+          }`}
+          dir={isPersian ? "rtl" : "ltr"}
+          onClick={() => {
+            if (step === 6) {
+              navigateTo("/lessons/cross-site-scripting-guide");
+            } else {
+              nextStep();
+            }
+          }}
+        >
 
-          <div className="leading-7 text-sm sm:text-base pr-6">
-            {step === 0 && (
-              <p>
-                Imagine you are the owner of <strong>breddit.com</strong>, the
-                number one social media site for the baking industry. You have
-                an avid community of commenters who love sharing their bread
-                knowledge.
-              </p>
-            )}
-
-            {step === 1 && (
-              <p>
-                Because the main use of your website is to facilitate
-                discussion, users can add comments, which are saved to the
-                database and displayed to other users.
-              </p>
-            )}
-
-            {step === 2 && (
-              <p>
-                Unfortunately the popularity of your site has also attracted the
-                attention of hackers, who want to access your site for nefarious
-                purposes.
-              </p>
-            )}
-
-            {step === 3 && (
-              <p>
-                Unless you are careful when constructing the HTML, hackers can abuse the
-                comment function by injecting JavaScript.
-              </p>
-            )}
-
-            {step === 4 && (
-              <p>
-                Watch how <strong>Mal</strong> injects malicious JavaScript to attack another user.
-              </p>
-            )}
-
-            {step === 5 && (
-              <p>
-                A real attack might use injected JavaScript to redirect Vic to a malicious website under Mal's control, allowing Mal to steal his cookies.
-              </p>
-            )}
-            {step === 6 && (
-  <p>
-    Let's learn how to protect against cross-site scripting!
-  </p>
-)}
-
-
-
+          <div className={`leading-7 text-sm sm:text-base ${isPersian ? "pl-6" : "pr-6"}`}>
+            <LessonStepText parts={lessonSteps[step]} />
           </div>
 
-          <span className="absolute right-3 bottom-3 sm:right-4 sm:bottom-4 text-text-muted text-sm sm:text-base">
-            →
+          <span
+            className={`absolute bottom-3 text-text-muted text-sm sm:bottom-4 sm:text-base ${
+              isPersian ? "left-3 sm:left-4" : "right-3 sm:right-4"
+            }`}
+          >
+            {isPersian ? "←" : "→"}
           </span>
         </div>
 
@@ -209,7 +184,7 @@ function CrossSiteScripting() {
                 alt="Vic Baking"
                 className="w-[260px] h-auto object-contain rounded-xl"
               />
-              <BredditBox currentStep={step} />
+              <BredditBox currentStep={step} isPersian={isPersian} />
             </div>
           )}
 
@@ -217,7 +192,7 @@ function CrossSiteScripting() {
           <div className="flex-1">
             {(step >= 2 && step <= 5) && (
               <div className="flex items-center gap-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                <BredditBox isAttacker={true} currentStep={step} />
+                <BredditBox isAttacker={true} currentStep={step} isPersian={isPersian} />
                 <img
                   src={malPensive}
                   alt="Attacker"
@@ -229,6 +204,28 @@ function CrossSiteScripting() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LessonStepText({ parts }) {
+  return (
+    <p>
+      {parts.map((part, index) => {
+        if (part.type === "strong") {
+          return (
+            <strong
+              key={`${part.text}-${index}`}
+              dir={part.dir}
+              className={part.dir === "ltr" ? "inline-block" : undefined}
+            >
+              {part.text}
+            </strong>
+          );
+        }
+
+        return <span key={`${part.text}-${index}`}>{part.text}</span>;
+      })}
+    </p>
   );
 }
 

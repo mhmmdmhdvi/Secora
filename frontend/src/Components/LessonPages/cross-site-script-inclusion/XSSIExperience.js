@@ -81,30 +81,61 @@ function XSSIExperience({ lesson }) {
 }
 
 function OriginTable({ table }) {
+  const rows = parseOriginRows(table.body);
+
   return (
     <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-amber-100 bg-white text-slate-800 shadow-xl shadow-amber-900/5 dark:border-border dark:bg-surface dark:text-text dark:shadow-black/20">
       <div className="border-b border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-3 text-center text-sm font-semibold text-amber-900 dark:border-border dark:bg-none dark:bg-surface-muted dark:text-text">
         {table.intro}
       </div>
-      <pre className="overflow-x-auto whitespace-pre p-4 font-mono text-[11px] leading-relaxed text-slate-700 dark:text-text-muted sm:p-6 sm:text-sm">
-        {table.body}
-      </pre>
+      <div dir="ltr" className="p-4 font-mono text-[11px] sm:p-6 sm:text-sm">
+        <div className="min-w-[34rem] overflow-hidden rounded-xl border border-amber-100 dark:border-border">
+          {rows.map((row, index) => (
+            <div
+              key={`${row.url}-${index}`}
+              className={`grid grid-cols-[minmax(15rem,1fr)_minmax(12rem,0.85fr)] gap-4 px-4 py-3 ${
+                index === 0
+                  ? "bg-amber-50 font-semibold text-amber-950 dark:bg-surface-muted dark:text-text"
+                  : "border-t border-amber-100 text-slate-700 dark:border-border dark:text-text-muted"
+              }`}
+            >
+              <span className="text-left" dir="ltr">{row.url}</span>
+              <span className="text-right" dir="auto">{row.origin}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 function CodeBlock({ example }) {
   return (
-    <div className="w-full max-w-2xl bg-gray-900 rounded-2xl overflow-hidden shadow-lg">
+    <div dir="ltr" className="w-full max-w-2xl bg-gray-900 rounded-2xl overflow-hidden shadow-lg text-left">
       <div className="bg-gray-800 text-gray-300 px-4 py-2 text-sm font-mono">
         {example.filename}
       </div>
 
-      <pre className="p-3 sm:p-4 font-mono text-[10px] sm:text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-gray-100 overflow-x-auto">
+      <pre className="p-3 sm:p-4 font-mono text-[10px] sm:text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-gray-100 overflow-x-auto text-left">
         {example.code}
       </pre>
     </div>
   );
+}
+
+function parseOriginRows(body = "") {
+  return body
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [url, ...originParts] = line.split(/\s{2,}/);
+
+      return {
+        url: url || "",
+        origin: originParts.join(" ") || "",
+      };
+    });
 }
 
 export default XSSIExperience;

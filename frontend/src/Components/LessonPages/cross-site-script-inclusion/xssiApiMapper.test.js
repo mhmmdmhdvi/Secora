@@ -3,6 +3,7 @@ import { mapApiLessonToXSSILesson } from "./xssiApiMapper";
 test("maps an XSSI API payload into the interactive, guide, and quiz shape", () => {
   const lesson = mapApiLessonToXSSILesson(apiLessonPayload());
 
+  expect(lesson.slug).toBe("cross-site-script-inclusion");
   expect(lesson.title).toBe("Cross-Site Script Inclusion (XSSI)");
   expect(lesson.totalSteps).toBe(3);
   expect(lesson.finalStep).toBe(2);
@@ -12,6 +13,7 @@ test("maps an XSSI API payload into the interactive, guide, and quiz shape", () 
   expect(lesson.guide.overview.title).toBe("Cross-Site Script Inclusion (XSSI)");
   expect(lesson.quizIntro.title).toBe("Quiz: XSSI");
   expect(lesson.quiz.questions[0].answer).toBe(0);
+  expect(lesson.quiz.questions[0].key).toBe("origin-leak");
 });
 
 test("prefers localized simulation state from block content", () => {
@@ -44,6 +46,7 @@ test("prefers localized simulation state from block content", () => {
 
 function apiLessonPayload() {
   return {
+    slug: "cross-site-script-inclusion",
     title: "Cross-Site Script Inclusion (XSSI)",
     sections: [
       {
@@ -116,6 +119,7 @@ function apiLessonPayload() {
       passPercentage: 100,
       questions: [
         {
+          key: "origin-leak",
           prompt: "What is XSSI?",
           answers: [
             { text: "Correct", isCorrect: true },

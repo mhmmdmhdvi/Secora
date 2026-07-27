@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { FiArrowRight, FiCheckCircle, FiXCircle } from "react-icons/fi";
+
+import { useAppLanguage } from "../../../hooks/useAppLanguage";
+import { useAuth } from "../../../hooks/useAuth";
+import { saveQuizAttempt } from "../../../services/learningApi";
+import LessonFeedbackCard from "./LessonFeedbackCard";
 
 function QuizRunnerExperience({ lesson }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
+  const { language } = useAppLanguage();
   const { questions } = lesson.quiz;
 
   const [current, setCurrent] = useState(0);
@@ -12,6 +20,8 @@ function QuizRunnerExperience({ lesson }) {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [results, setResults] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [recommendation, setRecommendation] = useState(null);
 
   const question = questions[current];
 
@@ -21,6 +31,8 @@ function QuizRunnerExperience({ lesson }) {
     setScore(0);
     setFinished(false);
     setResults([]);
+    setAnswers({});
+    setRecommendation(null);
   }
 
   function selectAnswer(index) {
@@ -34,8 +46,17 @@ function QuizRunnerExperience({ lesson }) {
       copy[current] = correct;
       return copy;
     });
+    const updatedAnswers = {
+      ...answers,
+      [question.key || current]: {
+        selectedIndex: index,
+        correct,
+      },
+    };
+    setAnswers(updatedAnswers);
 
-    if (correct) setScore((s) => s + 1);
+    const nextScore = score + (correct ? 1 : 0);
+    if (correct) setScore(nextScore);
 
     setTimeout(() => {
       const next = current + 1;
@@ -44,8 +65,29 @@ function QuizRunnerExperience({ lesson }) {
         setSelected(null);
       } else {
         setFinished(true);
+        recordQuizAttempt(nextScore, updatedAnswers);
       }
     }, 1200);
+  }
+
+  function recordQuizAttempt(finalScore, finalAnswers) {
+    if (!isAuthenticated || !lesson.slug) return;
+
+    saveQuizAttempt(
+      lesson.slug,
+      {
+        score: finalScore,
+        totalQuestions: questions.length,
+        answers: finalAnswers,
+      },
+      { locale: language }
+    )
+      .then((payload) => {
+        if (payload?.recommendation) {
+          setRecommendation(payload.recommendation);
+        }
+      })
+      .catch(() => {});
   }
 
   if (finished) {
@@ -55,11 +97,15 @@ function QuizRunnerExperience({ lesson }) {
       <div className="min-h-screen pt-8 sm:pt-10 px-4 sm:px-5 flex flex-col items-center">
         <div className="text-center mt-8 max-w-xl w-full">
           <div
-            className={`text-5xl sm:text-6xl mb-4 ${
+            className={`mb-4 flex justify-center ${
               passed ? "text-green-500" : "text-red-500"
             }`}
           >
-            {passed ? "✔" : "✖"}
+            {passed ? (
+              <FiCheckCircle className="h-14 w-14" aria-hidden="true" />
+            ) : (
+              <FiXCircle className="h-14 w-14" aria-hidden="true" />
+            )}
           </div>
 
           {passed ? (
@@ -68,8 +114,17 @@ function QuizRunnerExperience({ lesson }) {
                 {t("quiz.passed")}
               </h2>
 
+              {recommendation && (
+                <RecommendedNextCard
+                  onOpen={() => navigate(`/lessons/${recommendation.lesson.slug}`)}
+                  recommendation={recommendation}
+                />
+              )}
+
+              <LessonFeedbackCard lessonSlug={lesson.slug} source="quiz" />
+
               <button
-                className="w-full sm:w-auto bg-[#7756ff] hover:bg-[#684ae7] text-white px-6 py-3 rounded-xl font-semibold transition"
+                className="mt-5 w-full sm:w-auto bg-surface-muted hover:bg-border/60 text-text px-6 py-3 rounded-xl font-semibold transition"
                 onClick={() => navigate(lesson.lessonsPath)}
               >
                 {t("quiz.backToLessons")}
@@ -96,6 +151,8 @@ function QuizRunnerExperience({ lesson }) {
                   {t("quiz.neverMind")}
                 </button>
               </div>
+
+              <LessonFeedbackCard lessonSlug={lesson.slug} source="quiz" />
             </>
           )}
         </div>
@@ -117,10 +174,10 @@ function QuizRunnerExperience({ lesson }) {
               className="w-6 h-6 sm:w-7 sm:h-7 bg-surface rounded-full border-[3px] border-border flex items-center justify-center font-bold z-10"
             >
               {result === true && (
-                <span className="text-green-500 text-sm sm:text-base">✔</span>
+                <span className="text-green-500 text-sm sm:text-base">✓</span>
               )}
               {result === false && (
-                <span className="text-red-500 text-sm sm:text-base">✖</span>
+                <span className="text-red-500 text-sm sm:text-base">×</span>
               )}
             </div>
           );
@@ -154,11 +211,43 @@ function QuizRunnerExperience({ lesson }) {
 
           return (
             <div key={i} className={base} onClick={() => selectAnswer(i)}>
-              {option.toLowerCase()}
+              {option}
             </div>
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function RecommendedNextCard({ onOpen, recommendation }) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="mx-auto mt-2 w-full max-w-lg rounded-2xl border border-border bg-surface p-5 text-start shadow-sm">
+      <p className="text-sm font-semibold text-primary">
+        {t("quiz.recommendedNext")}
+      </p>
+      <h3 className="mt-2 text-xl font-semibold text-text">
+        {recommendation.lesson.title}
+      </h3>
+      {recommendation.path?.title && (
+        <p className="mt-1 text-sm text-text-muted">
+          {t("quiz.fromPath", { path: recommendation.path.title })}
+        </p>
+      )}
+      {recommendation.lesson.summary && (
+        <p className="mt-3 text-sm leading-6 text-text-muted">
+          {recommendation.lesson.summary}
+        </p>
+      )}
+      <button
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-text-inverted transition hover:bg-primary-hover sm:w-auto"
+        onClick={onOpen}
+      >
+        {t("quiz.startRecommended")}
+        <FiArrowRight className="h-4 w-4" aria-hidden="true" />
+      </button>
     </div>
   );
 }

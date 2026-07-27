@@ -19,8 +19,15 @@ from lessons.models import (
     QuizTranslation,
     TranslationStatus,
 )
-from lessons.seed_content.cross_site_script_inclusion import LESSON, inline_plain_text
-from lessons.seed_content.cross_site_script_inclusion_guide import GUIDE
+from lessons.seed_content.cross_site_script_inclusion import (
+    LESSON,
+    LESSON_TRANSLATIONS,
+    inline_plain_text,
+)
+from lessons.seed_content.cross_site_script_inclusion_guide import (
+    GUIDE,
+    GUIDE_TRANSLATIONS,
+)
 from lessons.services import publish_revision
 
 
@@ -133,35 +140,29 @@ def seed_revision(revision):
 
 def create_revision_translations(revision):
     for locale in LESSON["required_locales"]:
+        lesson_data = localized_lesson(locale)
         LessonTranslation.objects.create(
             revision=revision,
             locale=locale,
             status=TranslationStatus.READY,
-            title=LESSON["title"],
-            summary=LESSON["summary"],
-            seo_title=LESSON["title"],
-            seo_description=LESSON["summary"],
+            title=lesson_data["title"],
+            summary=lesson_data["summary"],
+            seo_title=lesson_data["title"],
+            seo_description=lesson_data["summary"],
         )
 
 
 def create_section_translations(section, title):
     for locale in LESSON["required_locales"]:
-        LessonSectionTranslation.objects.create(section=section, locale=locale, title=title)
-
-
-def create_block_translations(block, *, body="", heading="", content=None):
-    for locale in LESSON["required_locales"]:
-        LessonBlockTranslation.objects.create(
-            block=block,
+        LessonSectionTranslation.objects.create(
+            section=section,
             locale=locale,
-            heading=heading,
-            body=body,
-            content=content or {},
+            title=localized_section_title(title, locale),
         )
 
 
 def create_interactive_blocks(section):
-    for index, parts in enumerate(LESSON["steps"], start=1):
+    for index, _ in enumerate(LESSON["steps"], start=1):
         block = create_block(
             section,
             key=f"step-{index:02d}",
@@ -169,11 +170,14 @@ def create_interactive_blocks(section):
             sort_order=index,
             config={"tone": "instruction"},
         )
-        create_block_translations(
-            block,
-            body=inline_plain_text(parts),
-            content={"parts": parts},
-        )
+        for locale in LESSON["required_locales"]:
+            localized_parts = localized_lesson(locale)["steps"][index - 1]
+            LessonBlockTranslation.objects.create(
+                block=block,
+                locale=locale,
+                body=inline_plain_text(localized_parts),
+                content={"parts": localized_parts},
+            )
 
     simulation = create_block(
         section,
@@ -195,7 +199,12 @@ def create_interactive_blocks(section):
             },
         },
     )
-    create_block_translations(simulation)
+    for locale in LESSON["required_locales"]:
+        LessonBlockTranslation.objects.create(
+            block=simulation,
+            locale=locale,
+            content={"initial_state": simulation_initial_state(localized_lesson(locale))},
+        )
 
     completion = create_block(
         section,
@@ -204,11 +213,15 @@ def create_interactive_blocks(section):
         sort_order=len(LESSON["steps"]) + 2,
         config={"tone": "next-step", "action_path": LESSON["guide_path"]},
     )
-    create_block_translations(
-        completion,
-        body=inline_plain_text(LESSON["completion"]),
-        content={"parts": LESSON["completion"]},
-    )
+    for locale in LESSON["required_locales"]:
+        completion_parts = localized_lesson(locale)["completion"]
+        LessonBlockTranslation.objects.create(
+            block=completion,
+            locale=locale,
+            body=inline_plain_text(completion_parts),
+            heading=localized_completion_heading(locale),
+            content={"parts": completion_parts},
+        )
 
 
 def create_guide_block(section):
@@ -219,12 +232,15 @@ def create_guide_block(section):
         sort_order=1,
         config={"registry_key": "cross-site-script-inclusion-guide"},
     )
-    create_block_translations(
-        block,
-        heading=GUIDE["overview"]["title"],
-        body="Cross-Site Script Inclusion guide",
-        content={"guide": GUIDE},
-    )
+    for locale in LESSON["required_locales"]:
+        guide = localized_guide(locale)
+        LessonBlockTranslation.objects.create(
+            block=block,
+            locale=locale,
+            heading=guide["overview"]["title"],
+            body=localized_guide_body(locale),
+            content={"guide": guide},
+        )
 
 
 def create_block(section, *, key, block_type, sort_order, config):
@@ -249,11 +265,12 @@ def create_quiz(revision):
         shuffle_answers=quiz_data["shuffle_answers"],
     )
     for locale in LESSON["required_locales"]:
+        localized_quiz = localized_lesson(locale)["quiz"]
         QuizTranslation.objects.create(
             quiz=quiz,
             locale=locale,
-            title=quiz_data["title"],
-            instructions=quiz_data["instructions"],
+            title=localized_quiz["title"],
+            instructions=localized_quiz["instructions"],
         )
 
     for question_index, question_data in enumerate(quiz_data["questions"], start=1):
@@ -264,10 +281,13 @@ def create_quiz(revision):
             sort_order=question_index,
         )
         for locale in LESSON["required_locales"]:
+            localized_question = localized_lesson(locale)["quiz"]["questions"][
+                question_index - 1
+            ]
             QuestionTranslation.objects.create(
                 question=question,
                 locale=locale,
-                prompt=question_data["prompt"],
+                prompt=localized_question["prompt"],
             )
 
         for answer_index, answer_data in enumerate(question_data["answers"], start=1):
@@ -278,8 +298,54 @@ def create_quiz(revision):
                 is_correct=answer_data["is_correct"],
             )
             for locale in LESSON["required_locales"]:
+                localized_answer = localized_lesson(locale)["quiz"]["questions"][
+                    question_index - 1
+                ]["answers"][answer_index - 1]
                 AnswerTranslation.objects.create(
                     answer=answer,
                     locale=locale,
-                    text=answer_data["text"],
+                    text=localized_answer["text"],
                 )
+
+
+def simulation_initial_state(lesson_data):
+    return {
+        "origin_table": lesson_data["origin_table"],
+        "code_examples": lesson_data["code_examples"],
+        "guide_path": lesson_data["guide_path"],
+        "quiz_path": lesson_data["quiz_path"],
+        "quiz_start_path": lesson_data["quiz_start_path"],
+        "lessons_path": lesson_data["lessons_path"],
+        "quiz_intro": lesson_data["quiz_intro"],
+        "total_steps": lesson_data["total_steps"],
+        "final_step": lesson_data["final_step"],
+    }
+
+
+def localized_lesson(locale):
+    return LESSON_TRANSLATIONS.get(locale, LESSON)
+
+
+def localized_guide(locale):
+    return GUIDE_TRANSLATIONS.get(locale, GUIDE)
+
+
+def localized_section_title(title, locale):
+    if locale != "fa":
+        return title
+    return {
+        "Interactive demo": "دموی تعاملی",
+        "Guide": "راهنما",
+    }.get(title, title)
+
+
+def localized_completion_heading(locale):
+    if locale == "fa":
+        return "بعدی: کاهش خطر XSSI"
+    return "Next: reduce XSSI risk"
+
+
+def localized_guide_body(locale):
+    if locale == "fa":
+        return "راهنمای Cross-Site Script Inclusion"
+    return "Cross-Site Script Inclusion guide"

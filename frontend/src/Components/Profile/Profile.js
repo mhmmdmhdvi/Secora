@@ -6,6 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { getResponseErrorMessage } from "../../services/apiClient";
 import { Button, Card, Field, LanguageToggle, ThemeToggle } from "../UI";
 import { useTranslation } from "react-i18next";
+import ProfileAchievementsCard from "./ProfileAchievementsCard";
+import ProfileLevelCard from "./ProfileLevelCard";
 
 function Profile() {
   const navigate = useNavigate();
@@ -106,6 +108,9 @@ function Profile() {
 
   return (
     <div className="w-full max-w-3xl mx-auto md:ms-0 md:me-auto py-4 sm:py-6">
+      <ProfileLevelCard />
+      <ProfileAchievementsCard />
+
       <Card className="p-5 sm:p-6 mb-6">
         <h2 className="text-xl font-semibold text-text">{t("profile.appearance")}</h2>
         <p className="text-text-muted mt-1 mb-4">

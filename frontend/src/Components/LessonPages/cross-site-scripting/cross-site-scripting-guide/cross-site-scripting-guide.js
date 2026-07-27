@@ -1,6 +1,7 @@
 import SectionOverview from "./SectionOverview";
 import SectionRisks from "./SectionRisks";
 import SectionProtection from "./SectionProtection";
+import SectionCodeSamples from "./SectionCodeSamples";
 
 
 export default function CrossSiteScriptingGuide() {
@@ -11,6 +12,7 @@ export default function CrossSiteScriptingGuide() {
         <SectionOverview />
         <SectionRisks />
         <SectionProtection />
+        <SectionCodeSamples />
 
       </div>
     </div>

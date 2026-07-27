@@ -6,6 +6,7 @@
   "nav": {
     "home": "خانه",
     "lessons": "درس‌ها",
+    "paths": "مسیرها",
     "profile": "پروفایل",
     "login": "ورود",
     "logout": "خروج",
@@ -19,6 +20,34 @@
     "titleLine2": "از کدت دفاع کن",
     "description": "درس‌های تعاملی و رایگان برای کدنویسی امن؛ از OWASP Top 10 تا آسیب‌پذیری‌های تازه در هوش مصنوعی. یاد بگیر چطور جلوی SQL Injection، Prompt Injection، Cross-Site Scripting و حمله‌های واقعی دیگه رو بگیری. هر درس توسط متخصص نوشته شده و حدود ۱۵ تا ۳۰ دقیقه زمان میبره.",
     "browseLessons": "دیدن همه درس‌ها"
+  },
+  "continueLearning": {
+    "eyebrow": "ادامه یادگیری",
+    "title": "از همان‌جایی ادامه بده که مانده بود",
+    "loading": "در حال بارگذاری ادامه یادگیری",
+    "loadFailed": "خلاصه یادگیری حساب بارگذاری نشد.",
+    "resumeLabel": "ادامه درس",
+    "recommendedLabel": "پیشنهاد بعدی",
+    "continueLesson": "ادامه درس",
+    "startRecommended": "شروع پیشنهاد",
+    "startTitle": "اولین درس را شروع کن",
+    "startDescription": "یک درس انتخاب کن، حمله را در محیط امن امتحان کن، بعد راهنما را بخوان و آزمون را بگذران.",
+    "browseLessons": "دیدن درس‌ها",
+    "stepProgress": "مرحله {{current}} از {{total}}",
+    "fromPath": "از مسیر {{path}}",
+    "viewPaths": "دیدن مسیرها",
+    "currentPath": "مسیر فعلی",
+    "pathProgress": "{{percent}}٪ کامل شده",
+    "noPath": "هنوز مسیر فعالی نداری.",
+    "savedLessons": "درس‌های ذخیره‌شده",
+    "noSavedLessons": "درس‌هایی که ذخیره کنی اینجا نمایش داده می‌شوند.",
+    "viewAll": "دیدن همه",
+    "emptyHint": "وقتی درسی را شروع کنی، قدم بعدی‌ات اینجا نمایش داده می‌شود."
+  },
+  "footer": {
+    "tagline": "درس‌های مینیمال و تعاملی برای تمرین آرام و پیوسته کدنویسی امن.",
+    "navigation": "ناوبری پایین صفحه",
+    "copyright": "© {{year}} SecureLearn"
   },
   "auth": {
     "username": "نام کاربری",
@@ -63,7 +92,41 @@
     "deleting": "در حال حذف...",
     "passwordUpdated": "رمز عبور با موفقیت به‌روزرسانی شد",
     "passwordUpdateFailed": "به‌روزرسانی رمز عبور انجام نشد",
-    "deleteFailed": "حذف حساب انجام نشد"
+    "deleteFailed": "حذف حساب انجام نشد",
+    "currentLevel": "سطح فعلی",
+    "levelNumber": "سطح {{level}}",
+    "xp": "XP",
+    "levelProgress": "پیشرفت سطح",
+    "xpToNextLevel": "{{xp}} XP تا سطح بعدی",
+    "maxLevel": "به بالاترین سطح رسیدی",
+    "xpLoadFailed": "XP حساب بارگذاری نشد.",
+    "levelNames": {
+      "beginnerAnalyst": "تحلیلگر تازه‌کار",
+      "webSecurityApprentice": "کارآموز امنیت وب",
+      "injectionHunter": "شکارچی Injection",
+      "clientSideDefender": "مدافع سمت کاربر",
+      "secureCodeSpecialist": "متخصص کدنویسی امن"
+    },
+    "achievements": "دستاوردها",
+    "achievementsDescription": "نشان‌هایی که با پیشرفت واقعی در درس‌ها به دست می‌آیند.",
+    "achievementsCount": "{{unlocked}} از {{total}} باز شده",
+    "achievementsLoadFailed": "دستاوردهای حساب بارگذاری نشد.",
+    "achievementNames": {
+      "firstExploit": "اولین Exploit",
+      "firstGuideRead": "یادداشت دفاعی",
+      "firstQuizPassed": "آزمون گذرانده شد",
+      "firstPerfectQuiz": "آزمون بی‌نقص",
+      "firstLessonCompleted": "اولین درس کامل",
+      "sqlInjectionCompleted": "SQL Injection کامل شد"
+    },
+    "achievementDescriptions": {
+      "firstExploit": "اولین شبیه‌سازی حمله تعاملی را کامل کن.",
+      "firstGuideRead": "اولین راهنمای درس را کامل بخوان.",
+      "firstQuizPassed": "اولین آزمون درس را با موفقیت بگذران.",
+      "firstPerfectQuiz": "در یک آزمون به همه سؤال‌ها درست جواب بده.",
+      "firstLessonCompleted": "یک درس کامل، همراه با راهنما و آزمون، تمام کن.",
+      "sqlInjectionCompleted": "درس SQL Injection را کامل کن."
+    }
   },
   "theme": {
     "selection": "انتخاب تم. تم فعلی: {{theme}}.",
@@ -94,7 +157,101 @@
     "loadingXssi": "در حال بارگذاری درس XSSI",
     "loadingXssiGuide": "در حال بارگذاری راهنمای XSSI",
     "loadingXssiQuiz": "در حال بارگذاری آزمون XSSI",
-    "xssiLoadError": "درس XSSI بارگذاری نشد"
+    "xssiLoadError": "درس XSSI بارگذاری نشد",
+    "allLessons": "همه",
+    "savedLessons": "ذخیره‌شده‌ها",
+    "addBookmark": "ذخیره درس",
+    "removeBookmark": "حذف از ذخیره‌شده‌ها",
+    "loginToBookmark": "برای ذخیره کردن درس‌ها وارد حساب خود شو.",
+    "bookmarksLoadFailed": "درس‌های ذخیره‌شده بارگذاری نشد.",
+    "bookmarkSaveFailed": "به‌روزرسانی این ذخیره انجام نشد.",
+    "noSavedTitle": "هنوز درسی ذخیره نکردی",
+    "noSavedDescription": "درس‌هایی را که می‌خواهی بعداً بخوانی ذخیره کن تا اینجا نمایش داده شوند.",
+    "catalogDescription": "بر اساس موضوع، سختی، پیشرفت یا درس‌های آماده مطالعه فیلتر کن.",
+    "catalogProgressLoadFailed": "پیشرفت درس‌ها بارگذاری نشد.",
+    "resultCount": "{{count}} درس",
+    "topic": "موضوع",
+    "difficulty": "سختی",
+    "status": "وضعیت",
+    "recommended": "پیشنهادی",
+    "comingSoon": "به‌زودی",
+    "previewLesson": "پیش‌نمایش درس",
+    "minutes": "{{minutes}} دقیقه",
+    "quizScore": "بهترین آزمون: {{score}} از {{total}}",
+    "availability": {
+      "ready": "آماده",
+      "preview": "پیش‌نمایش",
+      "comingSoon": "به‌زودی"
+    },
+    "learningStatuses": {
+      "completed": "کامل شده",
+      "inProgress": "در حال یادگیری",
+      "notStarted": "شروع نشده"
+    },
+    "statuses": {
+      "all": "همه درس‌ها",
+      "recommended": "پیشنهادی",
+      "saved": "ذخیره‌شده",
+      "ready": "آماده مطالعه",
+      "inProgress": "در حال یادگیری",
+      "completed": "کامل شده",
+      "notStarted": "شروع نشده",
+      "comingSoon": "به‌زودی"
+    },
+    "difficulties": {
+      "all": "همه سطح‌ها",
+      "beginner": "مبتدی",
+      "intermediate": "متوسط",
+      "advanced": "پیشرفته"
+    },
+    "topics": {
+      "all": "همه موضوع‌ها",
+      "injection": "Injection",
+      "clientSide": "سمت کاربر",
+      "auth": "احراز هویت",
+      "data": "مدیریت داده",
+      "transport": "امنیت ارتباط",
+      "serverSide": "سمت سرور",
+      "supplyChain": "زنجیره تأمین",
+      "defense": "طراحی دفاعی",
+      "ai": "امنیت هوش مصنوعی"
+    }
+  },
+  "paths": {
+    "eyebrow": "مسیرهای یادگیری",
+    "title": "با یک مسیر روشن جلو برو",
+    "description": "مسیرها درس‌ها را به ترتیبی وصل می‌کنند که یادگیری منطقی‌تر شود. یک مرحله را تمام کن و بعد سراغ مرحله بعد برو.",
+    "loadFailed": "مسیرهای یادگیری بارگذاری نشد.",
+    "emptyTitle": "هنوز مسیری ساخته نشده",
+    "emptyDescription": "برای نمایش نقشه پیشرفت، مسیرهای یادگیری را در ادمین بساز یا seed کن.",
+    "lessonProgress": "{{completed}} از {{total}} درس کامل شده",
+    "minutes": "{{minutes}} دقیقه",
+    "selectPath": "انتخاب مسیر",
+    "recommendedPath": "پیشنهادی",
+    "nextLesson": "درس بعدی",
+    "continue": "ادامه",
+    "review": "مرور",
+    "pathProgress": "پیشرفت مسیر",
+    "pathCompleted": "مسیر کامل شد",
+    "completedLessons": "کامل‌شده",
+    "estimatedTime": "زمان تقریبی",
+    "remaining": "باقی‌مانده",
+    "remainingLessons": "{{count}} درس",
+    "currentTarget": "هدف فعلی",
+    "allDone": "مسیر کامل شد",
+    "lockedUntilReady": "قفل است",
+    "stepNumber": "مرحله {{number}}",
+    "pathStatus": {
+      "completed": "کامل شده",
+      "inProgress": "در حال یادگیری",
+      "notStarted": "شروع نشده"
+    },
+    "nodeStatus": {
+      "completed": "کامل شده",
+      "current": "فعلی",
+      "available": "آماده",
+      "locked": "قفل"
+    }
   },
   "quiz": {
     "score": "امتیاز تو {{score}} از {{total}} بود",
@@ -103,7 +260,36 @@
     "tryAgain": "تلاش دوباره",
     "neverMind": "فعلاً نه",
     "question": "سؤال",
-    "trueFalsePrefix": "درست یا نادرست: "
+    "trueFalsePrefix": "درست یا نادرست: ",
+    "recommendedNext": "پیشنهاد بعدی",
+    "fromPath": "از مسیر {{path}}",
+    "startRecommended": "شروع درس پیشنهادی"
+  },
+  "feedback": {
+    "eyebrow": "بازخورد سریع",
+    "title": "نظرت درباره این درس چیه؟",
+    "description": "بازخوردت کمک می‌کند درس‌های بعدی دقیق‌تر و روان‌تر شوند.",
+    "openButton": "ثبت بازخورد",
+    "editButton": "ویرایش بازخورد",
+    "close": "بستن بازخورد",
+    "rating": "امتیاز",
+    "ratingValue": "{{value}} از ۵",
+    "difficulty": "سطح سختی",
+    "difficultyOptions": {
+      "too_easy": "خیلی ساده",
+      "just_right": "مناسب",
+      "too_hard": "سخت"
+    },
+    "comment": "توضیح",
+    "commentPlaceholder": "اختیاری: کدام بخش باید واضح‌تر شود؟",
+    "submit": "ارسال بازخورد",
+    "saving": "در حال ذخیره...",
+    "saved": "بازخورد ذخیره شد.",
+    "saveFailed": "بازخورد ذخیره نشد.",
+    "loginRequired": "برای ارسال بازخورد وارد حساب شو.",
+    "thanksTitle": "ممنون بابت بازخوردت",
+    "thanksDescription": "از این بازخورد برای بهتر کردن کیفیت درس‌ها استفاده می‌کنم.",
+    "done": "تمام"
   },
   "lessonDescriptions": {
     "sql-injection": "اگر برنامه در برابر SQL Injection آسیب‌پذیر باشد، مهاجم می‌تواند کوئری‌های پایگاه‌داده را دستکاری کند و به داده‌هایی دسترسی بگیرد که نباید ببیند.",

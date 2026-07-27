@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useLessonProgress } from "../../../hooks/useLessonProgress";
 import SQLInjectionBankDemo from "./SQLInjectionBankDemo";
 import SQLInjectionCompletionCard from "./SQLInjectionCompletionCard";
 import SQLInjectionInstructionCard from "./SQLInjectionInstructionCard";
@@ -13,10 +14,46 @@ function SQLInjectionExperience({ lesson }) {
   const [password, setPassword] = useState("");
   const [logs, setLogs] = useState([]);
   const [showError, setShowError] = useState(false);
+  const [canSaveProgress, setCanSaveProgress] = useState(false);
+  const { isAuthenticated, isReady, progress, saveProgress } = useLessonProgress(
+    lesson.slug
+  );
 
   const nextStep = () => {
     if (step < lesson.finalStep) setStep(step + 1);
   };
+
+  useEffect(() => {
+    setCanSaveProgress(false);
+  }, [lesson.slug]);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    if (progress) {
+      const savedStep = Math.min(progress.currentStep || 0, lesson.finalStep);
+      if (savedStep > 0) setStep(savedStep);
+    }
+
+    setCanSaveProgress(true);
+  }, [isReady, lesson.finalStep, progress]);
+
+  useEffect(() => {
+    if (!canSaveProgress || !isAuthenticated) return;
+
+    saveProgress({
+      currentStep: step,
+      totalSteps: lesson.totalSteps,
+      interactiveCompleted: step >= lesson.finalStep,
+    }).catch(() => {});
+  }, [
+    canSaveProgress,
+    isAuthenticated,
+    lesson.finalStep,
+    lesson.totalSteps,
+    saveProgress,
+    step,
+  ]);
 
   useEffect(() => {
     if (step >= 1) setLogs([lesson.logs.initialized]);
@@ -25,6 +62,10 @@ function SQLInjectionExperience({ lesson }) {
   const handleLogin = (e) => {
     e.preventDefault();
     const query = `SELECT * FROM users WHERE email = '${username}' AND password = '${password}'`;
+    const normalizedPassword = password
+      .trim()
+      .replace(/[‘’]/g, "'")
+      .replace(/[‐‑‒–—―]/g, "-");
 
     if (step < lesson.successfulLoginStep) {
       setLogs([
@@ -35,10 +76,7 @@ function SQLInjectionExperience({ lesson }) {
       return;
     }
 
-    if (
-      username === lesson.credentials.email &&
-      password === lesson.credentials.injectionPassword
-    ) {
+    if (normalizedPassword === lesson.credentials.injectionPassword) {
       setLogs([
         lesson.logs.initialized,
         lesson.logs.attemptingLogin,

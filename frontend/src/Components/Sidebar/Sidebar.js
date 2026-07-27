@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   BookOpenIcon,
+  MapIcon,
   UserIcon,
   ArrowLeftOnRectangleIcon,
   Bars3Icon,
@@ -96,6 +97,15 @@ function Sidebar({
           >
             <BookOpenIcon className="w-5 h-5 shrink-0" />
             {(!collapsed || mobileSidebarOpen) && <span>{t("nav.lessons")}</span>}
+          </Link>
+
+          <Link
+            to="/paths"
+            onClick={closeMobileSidebar}
+            className="flex items-center gap-3 px-4 py-3 text-text-muted hover:bg-surface-muted hover:text-text rounded-md"
+          >
+            <MapIcon className="w-5 h-5 shrink-0" />
+            {(!collapsed || mobileSidebarOpen) && <span>{t("nav.paths")}</span>}
           </Link>
         </nav>
 

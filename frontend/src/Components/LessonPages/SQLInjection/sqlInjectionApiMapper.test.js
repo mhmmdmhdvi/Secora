@@ -3,6 +3,7 @@ import { mapApiLessonToSQLInjectionLesson } from "./sqlInjectionApiMapper";
 test("maps the SQL Injection API payload into the shared lesson experience shape", () => {
   const lesson = mapApiLessonToSQLInjectionLesson(apiLessonPayload());
 
+  expect(lesson.slug).toBe("sql-injection");
   expect(lesson.title).toBe("SQL Injection");
   expect(lesson.totalSteps).toBe(3);
   expect(lesson.finalStep).toBe(2);
@@ -32,12 +33,14 @@ test("maps guide and quiz content from the SQL Injection API payload", () => {
 
   expect(lesson.quizIntro.title).toBe("Quiz: SQL Injection");
   expect(lesson.quiz.questions[0].answer).toBe(1);
+  expect(lesson.quiz.questions[0].key).toBe("question");
   expect(lesson.quiz.passScore).toBe(1);
   expect(lesson.guide.overview.title).toBe("SQL Injection");
 });
 
 function apiLessonPayload() {
   return {
+    slug: "sql-injection",
     title: "SQL Injection",
     sections: [
       {
@@ -143,6 +146,7 @@ function apiLessonPayload() {
       passPercentage: 100,
       questions: [
         {
+          key: "question",
           prompt: "Question?",
           answers: [
             { text: "True", isCorrect: false },

@@ -6,6 +6,7 @@
   "nav": {
     "home": "Home",
     "lessons": "Lessons",
+    "paths": "Paths",
     "profile": "Profile",
     "login": "Login",
     "logout": "Logout",
@@ -19,6 +20,34 @@
     "titleLine2": "Defend your code",
     "description": "Free interactive secure code lessons covering the OWASP Top 10 and emerging AI vulnerabilities. Learn how to prevent SQL injection, prompt injection, cross-site scripting, and more real world attacks. Expert-written, 15-30 minutes each.",
     "browseLessons": "Browse All Lessons"
+  },
+  "continueLearning": {
+    "eyebrow": "Continue learning",
+    "title": "Pick up where you left off",
+    "loading": "Loading continue learning",
+    "loadFailed": "Could not load your learning summary.",
+    "resumeLabel": "Resume lesson",
+    "recommendedLabel": "Recommended next",
+    "continueLesson": "Continue lesson",
+    "startRecommended": "Start recommended",
+    "startTitle": "Start your first lesson",
+    "startDescription": "Choose a lesson, try the attack safely, then read the guide and pass the quiz.",
+    "browseLessons": "Browse lessons",
+    "stepProgress": "Step {{current}} of {{total}}",
+    "fromPath": "From {{path}}",
+    "viewPaths": "View paths",
+    "currentPath": "Current path",
+    "pathProgress": "{{percent}}% complete",
+    "noPath": "No active path yet.",
+    "savedLessons": "Saved lessons",
+    "noSavedLessons": "Saved lessons will appear here.",
+    "viewAll": "View all",
+    "emptyHint": "Once you start a lesson, your next step will appear here."
+  },
+  "footer": {
+    "tagline": "Minimal, hands-on secure coding lessons built for steady practice.",
+    "navigation": "Footer navigation",
+    "copyright": "© {{year}} SecureLearn"
   },
   "auth": {
     "username": "Username",
@@ -63,7 +92,41 @@
     "deleting": "Deleting...",
     "passwordUpdated": "Password updated successfully",
     "passwordUpdateFailed": "Could not update password",
-    "deleteFailed": "Error deleting account"
+    "deleteFailed": "Error deleting account",
+    "currentLevel": "Current level",
+    "levelNumber": "Level {{level}}",
+    "xp": "XP",
+    "levelProgress": "Level progress",
+    "xpToNextLevel": "{{xp}} XP to next level",
+    "maxLevel": "Highest level reached",
+    "xpLoadFailed": "Could not load your XP.",
+    "levelNames": {
+      "beginnerAnalyst": "Beginner Analyst",
+      "webSecurityApprentice": "Web Security Apprentice",
+      "injectionHunter": "Injection Hunter",
+      "clientSideDefender": "Client-Side Defender",
+      "secureCodeSpecialist": "Secure Code Specialist"
+    },
+    "achievements": "Achievements",
+    "achievementsDescription": "Badges earned from real lesson milestones.",
+    "achievementsCount": "{{unlocked}}/{{total}} unlocked",
+    "achievementsLoadFailed": "Could not load your achievements.",
+    "achievementNames": {
+      "firstExploit": "First Exploit",
+      "firstGuideRead": "Defense Notes",
+      "firstQuizPassed": "Quiz Cleared",
+      "firstPerfectQuiz": "Perfect Quiz",
+      "firstLessonCompleted": "First Lesson Complete",
+      "sqlInjectionCompleted": "SQL Injection Complete"
+    },
+    "achievementDescriptions": {
+      "firstExploit": "Finish your first interactive attack simulation.",
+      "firstGuideRead": "Complete your first lesson guide.",
+      "firstQuizPassed": "Pass your first lesson quiz.",
+      "firstPerfectQuiz": "Answer every question correctly in a quiz.",
+      "firstLessonCompleted": "Complete a full lesson package.",
+      "sqlInjectionCompleted": "Complete the SQL Injection lesson."
+    }
   },
   "theme": {
     "selection": "Theme selection. Current theme: {{theme}}.",
@@ -94,7 +157,101 @@
     "loadingXssi": "Loading XSSI lesson...",
     "loadingXssiGuide": "Loading XSSI guide...",
     "loadingXssiQuiz": "Loading XSSI quiz...",
-    "xssiLoadError": "Could not load the XSSI lesson"
+    "xssiLoadError": "Could not load the XSSI lesson",
+    "allLessons": "All",
+    "savedLessons": "Saved",
+    "addBookmark": "Save lesson",
+    "removeBookmark": "Remove bookmark",
+    "loginToBookmark": "Log in to save lessons.",
+    "bookmarksLoadFailed": "Could not load your saved lessons.",
+    "bookmarkSaveFailed": "Could not update this bookmark.",
+    "noSavedTitle": "No saved lessons yet",
+    "noSavedDescription": "Save lessons you want to study later and they will appear here.",
+    "catalogDescription": "Filter by topic, difficulty, progress, or what is ready to study now.",
+    "catalogProgressLoadFailed": "Could not load lesson progress.",
+    "resultCount": "{{count}} lessons",
+    "topic": "Topic",
+    "difficulty": "Difficulty",
+    "status": "Status",
+    "recommended": "Recommended",
+    "comingSoon": "Coming soon",
+    "previewLesson": "Preview Lesson",
+    "minutes": "{{minutes}} min",
+    "quizScore": "Best quiz: {{score}}/{{total}}",
+    "availability": {
+      "ready": "Ready",
+      "preview": "Preview",
+      "comingSoon": "Coming soon"
+    },
+    "learningStatuses": {
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "notStarted": "Not started"
+    },
+    "statuses": {
+      "all": "All lessons",
+      "recommended": "Recommended",
+      "saved": "Saved",
+      "ready": "Ready now",
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "notStarted": "Not started",
+      "comingSoon": "Coming soon"
+    },
+    "difficulties": {
+      "all": "All difficulties",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "topics": {
+      "all": "All topics",
+      "injection": "Injection",
+      "clientSide": "Client-side",
+      "auth": "Authentication",
+      "data": "Data handling",
+      "transport": "Transport security",
+      "serverSide": "Server-side",
+      "supplyChain": "Supply chain",
+      "defense": "Defensive design",
+      "ai": "AI security"
+    }
+  },
+  "paths": {
+    "eyebrow": "Learning paths",
+    "title": "Follow a clear route",
+    "description": "Paths connect lessons in the order that makes the most sense. Finish one node, then move to the next.",
+    "loadFailed": "Could not load learning paths.",
+    "emptyTitle": "No paths yet",
+    "emptyDescription": "Seed or create learning paths in the admin to show progress maps here.",
+    "lessonProgress": "{{completed}}/{{total}} lessons complete",
+    "minutes": "{{minutes}} min",
+    "selectPath": "Choose path",
+    "recommendedPath": "Recommended",
+    "nextLesson": "Next lesson",
+    "continue": "Continue",
+    "review": "Review",
+    "pathProgress": "Path progress",
+    "pathCompleted": "Path complete",
+    "completedLessons": "Completed",
+    "estimatedTime": "Estimated time",
+    "remaining": "Remaining",
+    "remainingLessons": "{{count}} left",
+    "currentTarget": "Current target",
+    "allDone": "Path complete",
+    "lockedUntilReady": "Locked",
+    "stepNumber": "Step {{number}}",
+    "pathStatus": {
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "notStarted": "Not started"
+    },
+    "nodeStatus": {
+      "completed": "Completed",
+      "current": "Current",
+      "available": "Available",
+      "locked": "Locked"
+    }
   },
   "quiz": {
     "score": "You scored {{score}} out of {{total}}",
@@ -103,7 +260,36 @@
     "tryAgain": "Try again",
     "neverMind": "Never mind",
     "question": "Question",
-    "trueFalsePrefix": "True or False: "
+    "trueFalsePrefix": "True or False: ",
+    "recommendedNext": "Recommended next",
+    "fromPath": "From {{path}}",
+    "startRecommended": "Start recommended lesson"
+  },
+  "feedback": {
+    "eyebrow": "Quick feedback",
+    "title": "How was this lesson?",
+    "description": "Your feedback helps improve future lessons.",
+    "openButton": "Give feedback",
+    "editButton": "Edit feedback",
+    "close": "Close feedback",
+    "rating": "Rating",
+    "ratingValue": "{{value}} out of 5",
+    "difficulty": "Difficulty",
+    "difficultyOptions": {
+      "too_easy": "Too easy",
+      "just_right": "Good level",
+      "too_hard": "Too hard"
+    },
+    "comment": "Comment",
+    "commentPlaceholder": "Optional: what should be clearer?",
+    "submit": "Send feedback",
+    "saving": "Saving...",
+    "saved": "Feedback saved.",
+    "saveFailed": "Could not save feedback.",
+    "loginRequired": "Log in to send feedback.",
+    "thanksTitle": "Thanks for the feedback",
+    "thanksDescription": "I’ll use this signal to improve lesson quality.",
+    "done": "Done"
   },
   "state": {
     "somethingWentWrong": "Something went wrong",

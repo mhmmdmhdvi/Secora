@@ -16,6 +16,7 @@ export function mapApiLessonToXSSILesson(apiLesson) {
     simulation.config.initial_state;
 
   return {
+    slug: apiLesson.slug,
     title: apiLesson.title,
     totalSteps: initialState.total_steps,
     finalStep: initialState.final_step,
@@ -67,6 +68,7 @@ function mapQuizIntro(quizIntro) {
 
 function mapQuiz(apiQuiz) {
   const questions = apiQuiz.questions.map((question) => ({
+    key: question.key,
     type: question.answers.length === 2 ? "truefalse" : "multi",
     text: question.prompt,
     options: question.answers.map((answer) => answer.text),
