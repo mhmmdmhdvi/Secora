@@ -59,13 +59,13 @@ function SQLInjectionExperience({ lesson }) {
     if (step >= 1) setLogs([lesson.logs.initialized]);
   }, [lesson.logs.initialized, step]);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = (event) => {
+    event.preventDefault();
     const query = `SELECT * FROM users WHERE email = '${username}' AND password = '${password}'`;
     const normalizedPassword = password
       .trim()
-      .replace(/[‘’]/g, "'")
-      .replace(/[‐‑‒–—―]/g, "-");
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u2010-\u2015]/g, "-");
 
     if (step < lesson.successfulLoginStep) {
       setLogs([
@@ -94,8 +94,8 @@ function SQLInjectionExperience({ lesson }) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8 pb-10">
-      <h1 className="text-2xl sm:text-3xl font-bold text-text text-center mb-6 sm:mb-8">
+    <div className="mx-auto mt-5 w-full max-w-[90rem] overflow-hidden px-3 pb-12 sm:mt-8 sm:px-5 lg:px-8 2xl:px-10">
+      <h1 className="mb-5 break-words text-center text-xl font-bold text-text sm:mb-7 sm:text-2xl md:text-3xl">
         {lesson.title}
       </h1>
 
@@ -108,8 +108,8 @@ function SQLInjectionExperience({ lesson }) {
       {step === lesson.finalStep && <SQLInjectionCompletionCard lesson={lesson} />}
 
       {step !== lesson.finalStep && (
-        <div className="flex flex-col xl:flex-row justify-center items-start gap-6 lg:gap-10">
-          <div className="w-full max-w-xl flex flex-col items-center xl:items-stretch">
+        <div className="flex flex-col items-center justify-center gap-6 xl:flex-row xl:items-start xl:gap-8 2xl:gap-10">
+          <div className="flex w-full max-w-2xl flex-col items-center xl:max-w-xl xl:items-stretch">
             <SQLInjectionInstructionCard
               step={step}
               nextStep={nextStep}
@@ -123,7 +123,7 @@ function SQLInjectionExperience({ lesson }) {
             />
           </div>
 
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md xl:max-w-[27rem]">
             <SQLInjectionBankDemo
               lesson={lesson}
               step={step}

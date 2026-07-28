@@ -2,11 +2,11 @@ function SQLInjectionQueryBox({ lesson, step, username, password }) {
   if (step < 6) return null;
 
   return (
-    <div dir="ltr" className="w-full mt-5 overflow-hidden rounded-2xl border border-slate-700 bg-slate-950 text-left shadow-lg shadow-black/10 dark:border-slate-600 dark:shadow-black/30">
-      <div className="border-b border-slate-700 bg-slate-900 px-3 py-2 text-sm font-mono text-slate-300">
+    <div dir="ltr" className="mt-5 w-full overflow-hidden rounded-2xl border border-slate-700 bg-slate-950 text-left shadow-lg shadow-black/10 dark:border-slate-600 dark:shadow-black/30">
+      <div className="border-b border-slate-700 bg-slate-900 px-3 py-2 font-mono text-xs text-slate-300 sm:text-sm">
         {lesson.query.title}
       </div>
-      <pre className="m-0 overflow-x-auto whitespace-pre-wrap break-words p-4 text-left font-mono text-xs leading-relaxed text-sky-300 sm:text-sm">
+      <pre className="m-0 overflow-x-auto whitespace-pre-wrap break-words p-3 text-left font-mono text-[11px] leading-relaxed text-sky-300 sm:p-4 sm:text-sm">
         {password === lesson.credentials.injectionPassword ? (
           <>
             {`SELECT *

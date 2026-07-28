@@ -8,25 +8,27 @@ export default function GuideCodeSamples({ codeSamples }) {
   const [open, setOpen] = useState({});
 
   const toggle = (section) => {
-    setOpen((prev) => ({
-      ...prev,
-      [section]: !prev[section],
+    setOpen((previous) => ({
+      ...previous,
+      [section]: !previous[section],
     }));
   };
 
   return (
-    <section className="w-full flex flex-col items-center mt-12 sm:mt-20">
-      <div className="w-full max-w-4xl px-4 sm:px-0 space-y-6">
+    <section className="mt-10 flex w-full flex-col items-center sm:mt-16">
+      <div className="w-full max-w-4xl space-y-6 px-1 sm:px-0">
         <div className="flex items-center gap-3">
-          <span className="text-2xl sm:text-3xl text-text-muted">
+          <span className="text-2xl text-text-muted sm:text-3xl" aria-hidden="true">
             {codeSamples.icon}
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-text">
+          <h2 className="break-words text-2xl font-bold text-text sm:text-3xl">
             {codeSamples.title}
           </h2>
         </div>
 
-        <p className="text-base sm:text-lg text-text-muted">{codeSamples.intro}</p>
+        <p className="break-words text-base text-text-muted sm:text-lg">
+          {codeSamples.intro}
+        </p>
 
         <div className="space-y-4">
           {codeSamples.items.map((item) => (
@@ -38,23 +40,27 @@ export default function GuideCodeSamples({ codeSamples }) {
             />
           ))}
 
-          <div
+          <button
+            type="button"
             onClick={() => navigate(codeSamples.quiz_cta.path)}
-            className="mt-10 cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl
-            p-6 sm:p-8 active:scale-[0.98] transition shadow-md hover:shadow-xl border-4 border-black text-center"
+            className="mt-8 w-full cursor-pointer rounded-xl border-4 border-black bg-indigo-500 p-5 text-center text-white shadow-md transition hover:bg-indigo-600 hover:shadow-xl active:scale-[0.98] sm:mt-10 sm:p-8"
           >
-            <p className="text-sm font-semibold opacity-90 mb-2">
+            <p className="mb-2 text-sm font-semibold opacity-90">
               {codeSamples.quiz_cta.eyebrow}
             </p>
 
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center justify-center gap-2">
-              <span>{codeSamples.quiz_cta.icon}</span>
-              <span className="text-indigo-950 dark:text-white">{codeSamples.quiz_cta.label}</span>
+            <h2 className="mb-3 flex flex-wrap items-center justify-center gap-2 text-2xl font-bold sm:text-3xl">
+              <span aria-hidden="true">{codeSamples.quiz_cta.icon}</span>
+              <span className="text-indigo-950 dark:text-white">
+                {codeSamples.quiz_cta.label}
+              </span>
               <span className="text-white">{codeSamples.quiz_cta.title}</span>
             </h2>
 
-            <p className="text-md opacity-95">{codeSamples.quiz_cta.summary}</p>
-          </div>
+            <p className="text-sm opacity-95 sm:text-base">
+              {codeSamples.quiz_cta.summary}
+            </p>
+          </button>
         </div>
       </div>
     </section>
@@ -63,31 +69,34 @@ export default function GuideCodeSamples({ codeSamples }) {
 
 function AccordionItem({ item, isOpen, onToggle }) {
   return (
-    <div className="border border-border rounded-xl overflow-hidden transition-all duration-300 bg-surface">
+    <div className="overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300">
       <button
+        type="button"
         onClick={onToggle}
-        className="w-full flex justify-between items-center px-5 sm:px-6 py-5 text-left font-semibold
-        text-text bg-surface hover:bg-surface-muted active:scale-[0.98] transition"
+        className="flex w-full items-center justify-between gap-4 bg-surface px-4 py-4 text-left font-semibold text-text transition hover:bg-surface-muted active:scale-[0.98] sm:px-6 sm:py-5"
       >
-        <span>{item.title}</span>
+        <span className="min-w-0 break-words">{item.title}</span>
         <span
-          className={`transform transition-transform duration-300 text-text-muted ${
+          className={`shrink-0 transform text-text-muted transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
           }`}
+          aria-hidden="true"
         >
           ▼
         </span>
       </button>
 
       <div
-        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isOpen ? "opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-6 pb-6 pt-2 text-text-muted">
+        <div className="px-4 pb-5 pt-2 text-text-muted sm:px-6 sm:pb-6">
           {item.samples.map((sample) => (
             <div key={sample.heading}>
-              <h3 className="font-semibold mt-6 mb-2">{sample.heading}</h3>
+              <h3 className="mb-2 mt-5 break-words font-semibold sm:mt-6">
+                {sample.heading}
+              </h3>
               <GuideTerminalBox code={sample.code} />
             </div>
           ))}

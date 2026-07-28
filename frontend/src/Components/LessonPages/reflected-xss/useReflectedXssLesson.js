@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 
 import { normalizeLanguage } from "../../../i18n";
 import { fetchLesson } from "../../../services/lessonsApi";
-import { mapApiLessonToCrossSiteScriptingLesson } from "./xssApiMapper";
+import { mapApiLessonToReflectedXssLesson } from "./reflectedXssApiMapper";
 
-export function useCrossSiteScriptingLesson() {
+export function useReflectedXssLesson() {
   const { i18n } = useTranslation();
   const locale = normalizeLanguage(i18n.language);
   const [lesson, setLesson] = useState(null);
@@ -17,10 +17,10 @@ export function useCrossSiteScriptingLesson() {
     setError(null);
     setLesson(null);
 
-    fetchLesson("cross-site-scripting", locale)
+    fetchLesson("reflected-xss", locale)
       .then((apiLesson) => {
         if (!ignore) {
-          setLesson(mapApiLessonToCrossSiteScriptingLesson(apiLesson));
+          setLesson(mapApiLessonToReflectedXssLesson(apiLesson));
         }
       })
       .catch((err) => {

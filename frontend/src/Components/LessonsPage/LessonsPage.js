@@ -64,6 +64,7 @@ function LessonsPage() {
 
     return matchesSearch && matchesTopic && matchesDifficulty && matchesSaved;
   });
+  const isBookmarkEmptyState = showSavedOnly && bookmarkSlugs.size === 0;
 
   return (
     <div className="w-full max-w-7xl mx-auto py-6 sm:py-8 md:py-10">
@@ -114,8 +115,16 @@ function LessonsPage() {
           ) : (
             <div className="col-span-full w-full">
               <EmptyState
-                title={t("lessons.noResultsTitle")}
-                description={t("lessons.noResultsDescription")}
+                title={
+                  isBookmarkEmptyState
+                    ? t("lessons.noSavedTitle")
+                    : t("lessons.noResultsTitle")
+                }
+                description={
+                  isBookmarkEmptyState
+                    ? t("lessons.noSavedDescription")
+                    : t("lessons.noResultsDescription")
+                }
               />
             </div>
           )}

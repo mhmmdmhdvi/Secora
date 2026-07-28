@@ -37,6 +37,18 @@ const lessonComponents = {
   "cross-site-scripting-quiz-start": lazy(() =>
     import("./cross-site-scripting/CrossSiteScriptingQuizStart")
   ),
+  "reflected-xss": lazy(() =>
+    import("./reflected-xss/ReflectedXss")
+  ),
+  "reflected-xss-guide": lazy(() =>
+    import("./reflected-xss/reflected-xss-guide/ReflectedXssGuide")
+  ),
+  "reflected-xss-quiz": lazy(() =>
+    import("./reflected-xss/ReflectedXssQuiz")
+  ),
+  "reflected-xss-quiz-start": lazy(() =>
+    import("./reflected-xss/ReflectedXssQuizStart")
+  ),
 };
 
 export default lessonComponents;

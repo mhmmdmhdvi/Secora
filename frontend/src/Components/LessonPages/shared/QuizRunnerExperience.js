@@ -14,6 +14,7 @@ function QuizRunnerExperience({ lesson }) {
   const { isAuthenticated } = useAuth();
   const { language } = useAppLanguage();
   const { questions } = lesson.quiz;
+  const isPersian = language === "fa";
 
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -41,11 +42,12 @@ function QuizRunnerExperience({ lesson }) {
     setSelected(index);
 
     const correct = index === question.answer;
-    setResults((prev) => {
-      const copy = [...prev];
+    setResults((previous) => {
+      const copy = [...previous];
       copy[current] = correct;
       return copy;
     });
+
     const updatedAnswers = {
       ...answers,
       [question.key || current]: {
@@ -94,23 +96,23 @@ function QuizRunnerExperience({ lesson }) {
     const passed = score === lesson.quiz.passScore;
 
     return (
-      <div className="min-h-screen pt-8 sm:pt-10 px-4 sm:px-5 flex flex-col items-center">
-        <div className="text-center mt-8 max-w-xl w-full">
+      <div className="flex min-h-screen flex-col items-center px-3 pt-8 sm:px-5 sm:pt-10">
+        <div className="mt-6 w-full max-w-xl text-center sm:mt-8">
           <div
             className={`mb-4 flex justify-center ${
               passed ? "text-green-500" : "text-red-500"
             }`}
           >
             {passed ? (
-              <FiCheckCircle className="h-14 w-14" aria-hidden="true" />
+              <FiCheckCircle className="h-12 w-12 sm:h-14 sm:w-14" aria-hidden="true" />
             ) : (
-              <FiXCircle className="h-14 w-14" aria-hidden="true" />
+              <FiXCircle className="h-12 w-12 sm:h-14 sm:w-14" aria-hidden="true" />
             )}
           </div>
 
           {passed ? (
             <>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-6">
+              <h2 className="mb-6 break-words text-2xl font-bold sm:text-3xl">
                 {t("quiz.passed")}
               </h2>
 
@@ -121,10 +123,15 @@ function QuizRunnerExperience({ lesson }) {
                 />
               )}
 
-              <LessonFeedbackCard lessonSlug={lesson.slug} source="quiz" />
+              <LessonFeedbackCard
+                autoOpen
+                lessonSlug={lesson.slug}
+                showTrigger={false}
+                source="quiz"
+              />
 
               <button
-                className="mt-5 w-full sm:w-auto bg-surface-muted hover:bg-border/60 text-text px-6 py-3 rounded-xl font-semibold transition"
+                className="mt-5 w-full rounded-xl bg-surface-muted px-6 py-3 font-semibold text-text transition hover:bg-border/60 sm:w-auto"
                 onClick={() => navigate(lesson.lessonsPath)}
               >
                 {t("quiz.backToLessons")}
@@ -132,27 +139,32 @@ function QuizRunnerExperience({ lesson }) {
             </>
           ) : (
             <>
-              <h2 className="text-2xl sm:text-3xl font-bold leading-tight">
+              <h2 className="break-words text-2xl font-bold leading-tight sm:text-3xl">
                 {t("quiz.score", { score, total: questions.length })}
               </h2>
 
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center mt-6">
+              <div className="mt-6 flex flex-col justify-center gap-4 sm:flex-row sm:gap-5">
                 <button
-                  className="w-full sm:w-auto bg-[#7756ff] hover:bg-[#684ae7] text-white px-6 py-3 rounded-xl font-semibold transition"
+                  className="w-full rounded-xl bg-[#7756ff] px-6 py-3 font-semibold text-white transition hover:bg-[#684ae7] sm:w-auto"
                   onClick={resetQuiz}
                 >
                   {t("quiz.tryAgain")}
                 </button>
 
                 <button
-                  className="w-full sm:w-auto bg-surface-muted hover:bg-border/60 text-text px-6 py-3 rounded-xl font-semibold transition"
+                  className="w-full rounded-xl bg-surface-muted px-6 py-3 font-semibold text-text transition hover:bg-border/60 sm:w-auto"
                   onClick={() => navigate(lesson.lessonsPath)}
                 >
                   {t("quiz.neverMind")}
                 </button>
               </div>
 
-              <LessonFeedbackCard lessonSlug={lesson.slug} source="quiz" />
+              <LessonFeedbackCard
+                autoOpen
+                lessonSlug={lesson.slug}
+                showTrigger={false}
+                source="quiz"
+              />
             </>
           )}
         </div>
@@ -161,56 +173,65 @@ function QuizRunnerExperience({ lesson }) {
   }
 
   return (
-    <div className="min-h-screen pt-8 sm:pt-10 px-4 sm:px-5 flex flex-col items-center">
-      <div className="relative flex justify-center gap-4 sm:gap-6 mt-3 mb-8">
-        <div className="absolute top-1/2 w-[150px] sm:w-[180px] h-[4px] bg-border -translate-y-1/2 z-0"></div>
+    <div className="flex min-h-screen flex-col items-center px-3 pt-8 sm:px-5 sm:pt-10">
+      <div className="relative mb-7 mt-3 flex max-w-full justify-center gap-4 sm:mb-8 sm:gap-6">
+        <div className="absolute top-1/2 z-0 h-1 w-[min(11rem,70vw)] -translate-y-1/2 bg-border" />
 
-        {questions.map((_, i) => {
-          const result = results[i];
+        {questions.map((_, index) => {
+          const result = results[index];
 
           return (
             <div
-              key={i}
-              className="w-6 h-6 sm:w-7 sm:h-7 bg-surface rounded-full border-[3px] border-border flex items-center justify-center font-bold z-10"
+              key={index}
+              className="z-10 flex h-6 w-6 items-center justify-center rounded-full border-[3px] border-border bg-surface font-bold sm:h-7 sm:w-7"
             >
               {result === true && (
-                <span className="text-green-500 text-sm sm:text-base">✓</span>
+                <span className="text-sm text-green-500 sm:text-base">✓</span>
               )}
               {result === false && (
-                <span className="text-red-500 text-sm sm:text-base">×</span>
+                <span className="text-sm text-red-500 sm:text-base">×</span>
               )}
             </div>
           );
         })}
       </div>
 
-      <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-center">
+      <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">
         {t("quiz.question")} {current + 1}
       </h2>
 
-      <p className="text-center max-w-2xl text-base sm:text-lg text-text-muted mt-2 mb-8 leading-7">
+      <p
+        dir={isPersian ? "rtl" : "ltr"}
+        className="mb-7 mt-2 max-w-2xl break-words text-center text-base leading-7 text-text-muted sm:mb-8 sm:text-lg"
+      >
         {question.type === "truefalse" && (
           <strong>{t("quiz.trueFalsePrefix")}</strong>
         )}
         {question.text}
       </p>
 
-      <div className="flex flex-col gap-4 sm:gap-[18px] w-full items-center">
-        {question.options.map((option, i) => {
+      <div className="flex w-full flex-col items-center gap-4 sm:gap-[18px]">
+        {question.options.map((option, index) => {
           let base =
-            "w-full max-w-[420px] bg-surface text-text py-4 px-5 rounded-[32px] border-2 border-border text-center text-base sm:text-[17px] cursor-pointer transition select-none hover:bg-surface-muted";
+            "w-full max-w-[420px] cursor-pointer select-none rounded-[28px] border-2 border-border bg-surface px-4 py-4 text-center text-base text-text transition hover:bg-surface-muted sm:rounded-[32px] sm:px-5 sm:text-[17px] break-words";
 
           if (selected !== null) {
-            if (i === question.answer)
+            if (index === question.answer) {
               base +=
                 " bg-green-100 border-green-500 text-green-800 dark:bg-green-950/60 dark:border-green-400 dark:text-green-100";
-            else if (i === selected)
+            } else if (index === selected) {
               base +=
                 " bg-red-100 border-red-500 text-red-800 dark:bg-red-950/60 dark:border-red-400 dark:text-red-100";
+            }
           }
 
           return (
-            <div key={i} className={base} onClick={() => selectAnswer(i)}>
+            <div
+              key={index}
+              dir={isPersian ? "rtl" : "ltr"}
+              className={base}
+              onClick={() => selectAnswer(index)}
+            >
               {option}
             </div>
           );
@@ -228,7 +249,7 @@ function RecommendedNextCard({ onOpen, recommendation }) {
       <p className="text-sm font-semibold text-primary">
         {t("quiz.recommendedNext")}
       </p>
-      <h3 className="mt-2 text-xl font-semibold text-text">
+      <h3 className="mt-2 break-words text-xl font-semibold text-text">
         {recommendation.lesson.title}
       </h3>
       {recommendation.path?.title && (
@@ -237,7 +258,7 @@ function RecommendedNextCard({ onOpen, recommendation }) {
         </p>
       )}
       {recommendation.lesson.summary && (
-        <p className="mt-3 text-sm leading-6 text-text-muted">
+        <p className="mt-3 break-words text-sm leading-6 text-text-muted">
           {recommendation.lesson.summary}
         </p>
       )}

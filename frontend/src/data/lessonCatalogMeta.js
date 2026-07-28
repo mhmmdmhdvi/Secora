@@ -1,11 +1,11 @@
 const READY_LESSONS = new Set([
   "sql-injection",
   "cross-site-script-inclusion",
+  "cross-site-scripting",
+  "reflected-xss",
 ]);
 
-const PREVIEW_LESSONS = new Set([
-  "cross-site-scripting",
-]);
+const PREVIEW_LESSONS = new Set([]);
 
 const DIFFICULTY_BY_LESSON = {
   "sql-injection": "beginner",

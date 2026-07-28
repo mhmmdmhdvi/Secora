@@ -1,8 +1,6 @@
 import { useAppLanguage } from "../../../../hooks/useAppLanguage";
 import TerminalBox from "../../shared/TerminalBox";
 
-import { getXssGuideCopy } from "./xssGuideContent";
-
 const HTML_ENCODINGS = [
   ["<", "&#60"],
   [">", "&#62"],
@@ -11,35 +9,36 @@ const HTML_ENCODINGS = [
   ["'", "&#39"],
 ];
 
-export default function SectionProtection() {
+export default function SectionProtection({ protection }) {
   const { language } = useAppLanguage();
   const isPersian = language === "fa";
-  const { protection } = getXssGuideCopy(language);
 
   return (
-    <section className="w-full flex flex-col items-center mt-6 sm:mt-8">
-      <div className="w-full max-w-4xl px-2 sm:px-0">
-        <div className="flex items-center gap-3 mb-6">
+    <section className="mt-6 flex w-full flex-col items-center sm:mt-8">
+      <div className="w-full max-w-4xl px-1 sm:px-0">
+        <div className="mb-6 flex items-center gap-3">
           <span className="text-3xl text-text-muted" aria-hidden="true">
             🛡️
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-text-muted">
+          <h2 className="break-words text-2xl font-bold text-text-muted sm:text-3xl">
             {protection.title}
           </h2>
         </div>
 
         <div
           dir={isPersian ? "rtl" : "ltr"}
-          className={`bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 dark:bg-blue-950/40 dark:border-blue-800 ${
+          className={`mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/40 sm:mb-8 sm:p-6 ${
             isPersian ? "text-right" : "text-left"
           }`}
         >
-          <p className="text-lg font-semibold text-text">{protection.intro}</p>
+          <p className="text-base font-semibold text-text sm:text-lg">
+            {protection.intro}
+          </p>
         </div>
 
         <div
           dir={isPersian ? "rtl" : "ltr"}
-          className={`text-text text-base sm:text-lg leading-relaxed space-y-5 sm:space-y-6 ${
+          className={`space-y-5 text-base leading-relaxed text-text sm:text-lg sm:space-y-6 ${
             isPersian ? "text-right" : "text-left"
           }`}
         >
@@ -103,8 +102,11 @@ function GuideSection({ section, isFirst, protection }) {
 
 function EncodingTable({ headings }) {
   return (
-    <div className="overflow-x-auto">
-      <table dir="ltr" className="w-full border border-border text-left text-sm sm:text-base">
+    <div className="w-full overflow-x-auto">
+      <table
+        dir="ltr"
+        className="w-full min-w-[24rem] border border-border text-left text-sm sm:text-base"
+      >
         <thead className="bg-surface-muted">
           <tr>
             <th className="border border-border px-4 py-2">{headings[0]}</th>
@@ -176,7 +178,11 @@ function RichText({ parts }) {
 
     if (part.type === "code") {
       return (
-        <code key={`${part.text}-${index}`} dir="ltr">
+        <code
+          key={`${part.text}-${index}`}
+          dir="ltr"
+          className="inline-block max-w-full break-words rounded bg-surface-muted px-1.5 py-0.5"
+        >
           {part.text}
         </code>
       );

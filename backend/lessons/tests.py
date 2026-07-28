@@ -18,7 +18,12 @@ from .seed_content.sql_injection_guide import GUIDE as SQL_INJECTION_GUIDE_SEED
 from .seed_content.sql_injection import LESSON as SQL_INJECTION_SEED
 from .seed_content.cross_site_script_inclusion import LESSON as XSSI_SEED
 from .seed_content.cross_site_script_inclusion_guide import GUIDE as XSSI_GUIDE_SEED
+from .seed_content.cross_site_scripting import GUIDE as XSS_GUIDE_SEED
 from .seed_content.cross_site_scripting import LESSON as XSS_SEED
+from .seed_content.reflected_xss import GUIDE as REFLECTED_XSS_GUIDE_SEED
+from .seed_content.reflected_xss import GUIDE_TRANSLATIONS as REFLECTED_XSS_GUIDE_TRANSLATIONS
+from .seed_content.reflected_xss import LESSON as REFLECTED_XSS_SEED
+from .seed_content.reflected_xss import LESSON_TRANSLATIONS as REFLECTED_XSS_TRANSLATIONS
 from .services import build_publish_readiness_errors, validate_revision_ready_for_publish
 from .validators import validate_block_config, validate_locale
 
@@ -311,17 +316,62 @@ class XssiSeedContentTests(SimpleTestCase):
         self.assertEqual(len(XSSI_SEED["quiz"]["questions"]), 2)
 
 
-class XssDraftSeedContentTests(SimpleTestCase):
-    def test_seed_preserves_current_incomplete_lesson_as_draft(self):
+class XssSeedContentTests(SimpleTestCase):
+    def test_seed_matches_completed_xss_lesson_shape(self):
         self.assertEqual(XSS_SEED["slug"], "cross-site-scripting")
         self.assertEqual(XSS_SEED["simulation_key"], "cross-site-scripting")
         self.assertEqual(len(XSS_SEED["steps"]), 7)
-        self.assertEqual(XSS_SEED["guide"]["status"], "draft")
+        self.assertEqual(XSS_SEED["total_steps"], 7)
+        self.assertEqual(XSS_SEED["final_step"], 6)
 
-    def test_seed_tracks_missing_authoring_work(self):
-        self.assertIn("quiz", XSS_SEED["guide"]["missing"])
-        self.assertIn("code_samples", XSS_SEED["guide"]["missing"])
-        self.assertNotIn("quiz", XSS_SEED)
+    def test_seed_includes_xss_guide_and_quiz(self):
+        self.assertEqual(XSS_GUIDE_SEED["overview"]["title"], "Cross-Site Scripting")
+        self.assertEqual(XSS_GUIDE_SEED["code_samples"]["items"][0]["title"], "Node")
+        self.assertEqual(len(XSS_SEED["quiz"]["questions"]), 2)
+
+
+class ReflectedXssSeedContentTests(SimpleTestCase):
+    def test_seed_matches_reflected_xss_lesson_shape(self):
+        self.assertEqual(REFLECTED_XSS_SEED["slug"], "reflected-xss")
+        self.assertEqual(REFLECTED_XSS_SEED["simulation_key"], "reflected-xss")
+        self.assertEqual(len(REFLECTED_XSS_SEED["steps"]), 14)
+        self.assertEqual(REFLECTED_XSS_SEED["total_steps"], 14)
+        self.assertEqual(REFLECTED_XSS_SEED["final_step"], 13)
+
+    def test_seed_includes_reflected_xss_visual_scene_data(self):
+        simulation = REFLECTED_XSS_SEED["simulation"]
+
+        self.assertEqual(simulation["site"]["url"], "www.welp.com")
+        self.assertEqual(simulation["scenes"]["12"]["type"], "server-log")
+        self.assertEqual(len(simulation["logs"]["lines"]), 12)
+        self.assertEqual(len(REFLECTED_XSS_SEED["quiz"]["questions"]), 3)
+
+    def test_seed_includes_reflected_xss_guide_and_quiz_cta(self):
+        self.assertEqual(REFLECTED_XSS_GUIDE_SEED["overview"]["title"], "Reflected XSS")
+        self.assertEqual(REFLECTED_XSS_GUIDE_SEED["quiz_cta"]["path"], "/lessons/reflected-xss-quiz")
+        self.assertEqual(
+            REFLECTED_XSS_GUIDE_SEED["protection"]["sections"][0]["table"]["headings"],
+            ["Character", "Encoding"],
+        )
+
+    def test_seed_includes_reflected_xss_persian_steps(self):
+        self.assertIn("fa", REFLECTED_XSS_TRANSLATIONS)
+        self.assertEqual(len(REFLECTED_XSS_TRANSLATIONS["fa"]["steps"]), 14)
+        self.assertIn(
+            "XSS بازتابی",
+            REFLECTED_XSS_TRANSLATIONS["fa"]["steps"][1][0]["text"],
+        )
+
+    def test_seed_includes_reflected_xss_persian_guide_and_quiz(self):
+        self.assertIn("fa", REFLECTED_XSS_GUIDE_TRANSLATIONS)
+        self.assertEqual(
+            REFLECTED_XSS_GUIDE_TRANSLATIONS["fa"]["overview"]["title"],
+            "XSS بازتابی",
+        )
+        self.assertEqual(
+            REFLECTED_XSS_TRANSLATIONS["fa"]["quiz"]["questions"][2]["answers"][0]["text"],
+            "نادرست",
+        )
 
 
 def publishable_revision(sections=None, quiz=None):

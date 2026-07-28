@@ -7,6 +7,7 @@ import { getResponseErrorMessage } from "../../services/apiClient";
 import { Button, Card, Field, LanguageToggle, ThemeToggle } from "../UI";
 import { useTranslation } from "react-i18next";
 import ProfileAchievementsCard from "./ProfileAchievementsCard";
+import ProfileDeleteAccountDialog from "./ProfileDeleteAccountDialog";
 import ProfileLevelCard from "./ProfileLevelCard";
 
 function Profile() {
@@ -17,6 +18,7 @@ function Profile() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const passwordControllerRef = useRef(null);
   const deleteControllerRef = useRef(null);
 
@@ -71,8 +73,6 @@ function Profile() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm(t("profile.deleteConfirm"))) return;
-
     if (isDeletingAccount) {
       return;
     }
@@ -88,6 +88,7 @@ function Profile() {
       });
 
       if (response.ok) {
+        setIsDeleteDialogOpen(false);
         logout();
         navigate("/");
       } else {
@@ -173,14 +174,23 @@ function Profile() {
         </p>
 
         <Button
-          onClick={handleDeleteAccount}
-          className="w-full sm:w-40"
+          onClick={() => setIsDeleteDialogOpen(true)}
+          className="w-full whitespace-nowrap sm:w-auto sm:min-w-44"
           variant="danger"
           disabled={isDeletingAccount}
         >
           {isDeletingAccount ? t("profile.deleting") : t("profile.deleteAccount")}
         </Button>
       </Card>
+
+      {isDeleteDialogOpen && (
+        <ProfileDeleteAccountDialog
+          isDeleting={isDeletingAccount}
+          onCancel={() => setIsDeleteDialogOpen(false)}
+          onConfirm={handleDeleteAccount}
+          t={t}
+        />
+      )}
     </div>
   );
 }

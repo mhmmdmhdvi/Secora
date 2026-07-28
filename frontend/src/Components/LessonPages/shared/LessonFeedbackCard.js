@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FiCheckCircle, FiMessageSquare, FiStar, FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -10,7 +10,12 @@ import { classNames } from "../../UI/classNames";
 
 const DIFFICULTY_OPTIONS = ["too_easy", "just_right", "too_hard"];
 
-function LessonFeedbackCard({ lessonSlug, source = "quiz" }) {
+function LessonFeedbackCard({
+  autoOpen = false,
+  lessonSlug,
+  showTrigger = true,
+  source = "quiz",
+}) {
   const { isAuthenticated } = useAuth();
   const { language } = useAppLanguage();
   const { t } = useTranslation();
@@ -20,6 +25,12 @@ function LessonFeedbackCard({ lessonSlug, source = "quiz" }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (autoOpen && isAuthenticated && !submitted) {
+      setIsOpen(true);
+    }
+  }, [autoOpen, isAuthenticated, submitted]);
 
   if (!lessonSlug) {
     return null;
@@ -71,14 +82,16 @@ function LessonFeedbackCard({ lessonSlug, source = "quiz" }) {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={openFeedback}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition hover:border-primary/50 hover:text-primary sm:w-auto"
-      >
-        <FiMessageSquare className="h-4 w-4" aria-hidden="true" />
-        {submitted ? t("feedback.editButton") : t("feedback.openButton")}
-      </button>
+      {showTrigger && (
+        <button
+          type="button"
+          onClick={openFeedback}
+          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition hover:border-primary/50 hover:text-primary sm:w-auto"
+        >
+          <FiMessageSquare className="h-4 w-4" aria-hidden="true" />
+          {submitted ? t("feedback.editButton") : t("feedback.openButton")}
+        </button>
+      )}
 
       {isOpen && (
         <div

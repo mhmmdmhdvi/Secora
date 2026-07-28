@@ -9,12 +9,12 @@ function renderInlineContent(parts) {
 
 function SQLInjectionCompletionCard({ lesson }) {
   return (
-    <div className="flex justify-center mt-8 sm:mt-10">
+    <div className="mt-6 flex justify-center sm:mt-8">
       <div
-        className="w-full max-w-2xl px-5 py-6 sm:px-8 sm:py-7 bg-surface-muted text-text rounded-2xl text-base sm:text-lg leading-relaxed cursor-pointer transition-all border border-border hover:-translate-y-1 hover:shadow-xl"
+        className="w-full max-w-2xl cursor-pointer rounded-2xl border border-border bg-surface-muted px-5 py-6 text-base leading-relaxed text-text transition-all hover:-translate-y-1 hover:shadow-xl sm:px-8 sm:py-7 sm:text-lg"
         onClick={() => navigateTo(lesson.guidePath)}
       >
-        <p>{renderInlineContent(lesson.completion)}</p>
+        <p className="break-words">{renderInlineContent(lesson.completion)}</p>
       </div>
     </div>
   );

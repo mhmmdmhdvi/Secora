@@ -14,7 +14,7 @@ function renderMutedPart(part, key) {
       key={key}
       dir={isCodeLike ? "ltr" : undefined}
       className={`text-text-muted${
-        isCodeLike ? " inline-block text-left [unicode-bidi:isolate]" : ""
+        isCodeLike ? " inline-block max-w-full break-words text-left [unicode-bidi:isolate]" : ""
       }${part.breakAll ? " break-all" : ""}`}
     >
       {part.text}
@@ -24,7 +24,11 @@ function renderMutedPart(part, key) {
 
 function renderCredentialPair(labelPart, valuePart, key) {
   return (
-    <span key={key} dir="ltr" className="inline-block text-left [unicode-bidi:isolate]">
+    <span
+      key={key}
+      dir="ltr"
+      className="inline-block max-w-full break-words text-left [unicode-bidi:isolate]"
+    >
       {labelPart.text}
       <span className="text-text-muted">{valuePart.text}</span>
     </span>
@@ -62,26 +66,30 @@ function renderStepContent(parts) {
 function SQLInjectionInstructionCard({ step, nextStep, steps }) {
   const { i18n } = useTranslation();
   const isPersian = normalizeLanguage(i18n.language) === "fa";
-  const textPaddingClass = isPersian ? "pl-8" : "pr-8";
-  const arrowPositionClass = isPersian ? "left-4" : "right-4";
+  const textPaddingClass = isPersian ? "pl-6" : "pr-6";
+  const arrowPositionClass = isPersian ? "left-3 sm:left-4" : "right-3 sm:right-4";
   const arrow = isPersian ? "←" : "→";
 
   return (
-    <div
-      className="w-full max-w-2xl p-5 sm:p-6 bg-surface text-text border rounded-2xl cursor-pointer
-      border-border active:scale-[0.98] transition touch-manipulation relative"
+    <button
+      type="button"
+      className="relative w-full max-w-2xl rounded-2xl border border-border bg-surface p-4 text-text transition active:scale-[0.98] sm:p-5 md:p-6"
       onClick={nextStep}
     >
-      <p className={`leading-7 text-sm sm:text-base ${textPaddingClass}`}>
+      <p
+        className={`break-words text-sm leading-7 sm:text-base ${textPaddingClass} ${
+          isPersian ? "text-right" : "text-left"
+        }`}
+      >
         {renderStepContent(steps[step] || [])}
       </p>
 
       <span
-        className={`absolute ${arrowPositionClass} bottom-4 text-lg text-text-muted`}
+        className={`absolute ${arrowPositionClass} bottom-3 text-sm text-text-muted sm:bottom-4 sm:text-base`}
       >
         {arrow}
       </span>
-    </div>
+    </button>
   );
 }
 

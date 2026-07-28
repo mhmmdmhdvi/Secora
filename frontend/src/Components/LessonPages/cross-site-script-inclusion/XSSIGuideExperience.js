@@ -14,13 +14,13 @@ const METRIC_TONES = {
 
 function XSSIGuideExperience({ guide }) {
   return (
-    <section className="w-full flex flex-col items-center mt-12 sm:mt-16">
-      <div className="w-full max-w-4xl px-4 sm:px-0 space-y-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-text text-center">
+    <section className="mt-8 flex w-full flex-col items-center px-3 sm:mt-12 sm:px-5 lg:px-8">
+      <div className="w-full max-w-4xl space-y-8 sm:space-y-10">
+        <h1 className="break-words text-center text-3xl font-bold text-text sm:text-4xl">
           {guide.overview.title}
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-12 mb-10 sm:mb-12 w-full max-w-3xl">
+        <div className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 lg:gap-10">
           {guide.overview.metrics.map((metric) => (
             <MetricCard key={metric.label} metric={metric} />
           ))}
@@ -29,7 +29,7 @@ function XSSIGuideExperience({ guide }) {
         {guide.overview.paragraphs.map((paragraph, index) => (
           <p
             key={index}
-            className="text-base sm:text-lg text-text leading-relaxed"
+            className="break-words text-base leading-relaxed text-text sm:text-lg"
           >
             <XSSIRichText parts={paragraph} />
           </p>
@@ -50,42 +50,44 @@ function MetricCard({ metric }) {
 
   return (
     <div
-      className={`border rounded-2xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm transition-colors ${tone}`}
+      className={`flex min-w-0 flex-col items-center rounded-2xl border p-4 text-center shadow-sm transition-colors sm:p-5 lg:p-6 ${tone}`}
     >
-      <div className="text-3xl sm:text-4xl mb-2 sm:mb-4">{metric.icon}</div>
-      <p className="text-sm sm:text-lg font-semibold text-text">
+      <div className="mb-2 text-3xl sm:mb-4 sm:text-4xl">{metric.icon}</div>
+      <p className="break-words text-sm font-semibold text-text sm:text-base lg:text-lg">
         {metric.label}
       </p>
-      <p className="font-bold text-sm sm:text-base">{metric.value}</p>
+      <p className="text-sm font-bold sm:text-base">{metric.value}</p>
     </div>
   );
 }
 
 function GuideSection({ section }) {
   return (
-    <>
-      <div className="flex items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
+    <section>
+      <div className="mb-5 flex items-center gap-2 sm:mb-6 sm:gap-3">
         {section.icon && (
           <span className="text-2xl sm:text-3xl" aria-hidden="true">
             {section.icon}
           </span>
         )}
-        <h2 className="text-xl sm:text-2xl font-semibold text-text-muted">
+        <h2 className="break-words text-xl font-semibold text-text-muted sm:text-2xl">
           {section.title}
         </h2>
       </div>
 
-      {section.blocks.map((block, index) => (
-        <GuideBlock key={index} block={block} />
-      ))}
-    </>
+      <div className="space-y-4 sm:space-y-5">
+        {section.blocks.map((block, index) => (
+          <GuideBlock key={index} block={block} />
+        ))}
+      </div>
+    </section>
   );
 }
 
 function GuideBlock({ block }) {
   if (block.type === "paragraph") {
     return (
-      <p className="text-base sm:text-lg text-text leading-relaxed">
+      <p className="break-words text-base leading-relaxed text-text sm:text-lg">
         <XSSIRichText parts={block.parts} />
       </p>
     );
@@ -102,18 +104,19 @@ function CodeSamples({ codeSamples }) {
       {codeSamples.items.map((item) => (
         <details
           key={item.title}
-          className="border border-border bg-surface rounded-xl overflow-hidden transition-all duration-300"
+          className="overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300"
         >
-          <summary
-            className="w-full flex justify-between items-center px-5 sm:px-6 py-5 text-left font-semibold
-            text-text bg-surface hover:bg-surface-muted active:scale-[0.98] transition cursor-pointer"
-          >
-            {item.title}
+          <summary className="flex w-full cursor-pointer items-center justify-between gap-4 bg-surface px-4 py-4 text-left font-semibold text-text transition hover:bg-surface-muted active:scale-[0.98] sm:px-6 sm:py-5">
+            <span dir="ltr" className="min-w-0 break-words">
+              {item.title}
+            </span>
           </summary>
-          <div className="px-6 pb-6 pt-2 text-text">
+          <div className="px-4 pb-5 pt-2 text-text sm:px-6 sm:pb-6">
             {item.samples.map((sample) => (
               <div key={sample.heading}>
-                <h3 className="font-semibold mt-6 mb-2">{sample.heading}</h3>
+                <h3 className="mb-2 mt-5 break-words font-semibold sm:mt-6">
+                  {sample.heading}
+                </h3>
                 <TerminalBox>{sample.code}</TerminalBox>
               </div>
             ))}
@@ -121,23 +124,25 @@ function CodeSamples({ codeSamples }) {
         </details>
       ))}
 
-      <div
+      <button
+        type="button"
         onClick={() => navigate(codeSamples.quiz_cta.path)}
-        className="mt-10 cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl
-        p-6 sm:p-8 active:scale-[0.98] transition shadow-md hover:shadow-xl border-4 border-black text-center"
+        className="mt-8 w-full cursor-pointer rounded-xl border-4 border-black bg-indigo-500 p-5 text-center text-white shadow-md transition hover:bg-indigo-600 hover:shadow-xl active:scale-[0.98] sm:mt-10 sm:p-8"
       >
-        <p className="text-sm font-semibold opacity-90 mb-2">
+        <p className="mb-2 text-sm font-semibold opacity-90">
           {codeSamples.quiz_cta.eyebrow}
         </p>
 
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center justify-center gap-2">
-          <span>{codeSamples.quiz_cta.icon}</span>
-          <span className="text-indigo-950 dark:text-white">{codeSamples.quiz_cta.label}</span>
+        <h2 className="mb-3 flex flex-wrap items-center justify-center gap-2 text-2xl font-bold sm:text-3xl">
+          <span aria-hidden="true">{codeSamples.quiz_cta.icon}</span>
+          <span className="text-indigo-950 dark:text-white">
+            {codeSamples.quiz_cta.label}
+          </span>
           <span className="text-white">{codeSamples.quiz_cta.title}</span>
         </h2>
 
-        <p className="text-md opacity-95">{codeSamples.quiz_cta.summary}</p>
-      </div>
+        <p className="text-sm opacity-95 sm:text-base">{codeSamples.quiz_cta.summary}</p>
+      </button>
     </div>
   );
 }

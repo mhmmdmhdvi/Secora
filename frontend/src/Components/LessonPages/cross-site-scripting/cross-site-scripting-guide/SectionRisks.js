@@ -1,45 +1,42 @@
 import { useAppLanguage } from "../../../../hooks/useAppLanguage";
 
-import { getXssGuideCopy } from "./xssGuideContent";
-
-export default function SectionRisks() {
+export default function SectionRisks({ risks }) {
   const { language } = useAppLanguage();
   const isPersian = language === "fa";
-  const { risks } = getXssGuideCopy(language);
 
   return (
-    <section className="w-full flex flex-col items-center mt-2 sm:mt-4">
-      <div className="w-full max-w-4xl px-2 sm:px-0">
-        <div className="flex items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
+    <section className="mt-2 flex w-full flex-col items-center sm:mt-4">
+      <div className="w-full max-w-4xl px-1 sm:px-0">
+        <div className="mb-5 flex items-center gap-2 sm:mb-6 sm:gap-3">
           <span className="text-2xl sm:text-3xl" aria-hidden="true">
             ⚠️
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-text-muted">
+          <h2 className="break-words text-2xl font-bold text-text-muted sm:text-3xl">
             {risks.title}
           </h2>
         </div>
 
         <div
           dir={isPersian ? "rtl" : "ltr"}
-          className={`bg-blue-50 border border-blue-200 rounded-xl p-5 sm:p-6 mb-4 shadow-sm dark:bg-blue-950/40 dark:border-blue-800 ${
+          className={`mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-800 dark:bg-blue-950/40 sm:p-6 ${
             isPersian ? "text-right" : "text-left"
           }`}
         >
-          <p className="text-base sm:text-lg font-medium text-blue-900 dark:text-blue-100">
+          <p className="text-base font-medium text-blue-900 dark:text-blue-100 sm:text-lg">
             {risks.question}
           </p>
         </div>
 
         <div
           dir={isPersian ? "rtl" : "ltr"}
-          className={`text-text text-base sm:text-lg leading-relaxed space-y-3 sm:space-y-4 ${
+          className={`space-y-3 text-base leading-relaxed text-text sm:text-lg sm:space-y-4 ${
             isPersian ? "text-right" : "text-left"
           }`}
         >
           <p>{risks.intro}</p>
 
           <ul
-            className={`list-disc list-outside space-y-2 ${
+            className={`list-outside list-disc space-y-2 ${
               isPersian ? "pr-6 sm:pr-10" : "pl-6 sm:pl-10"
             }`}
           >
