@@ -49,6 +49,9 @@ const lessonComponents = {
   "reflected-xss-quiz-start": lazy(() =>
     import("./reflected-xss/ReflectedXssQuizStart")
   ),
+  "dom-based-xss": lazy(() =>
+    import("./dom-based-xss/DomBasedXss")
+  ),
 };
 
 export default lessonComponents;

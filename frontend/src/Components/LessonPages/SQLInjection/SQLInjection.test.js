@@ -65,7 +65,7 @@ test("treats the step 11 injection as successful even when the email is differen
   expect(screen.getByText("Authentication successful.")).toBeInTheDocument();
 });
 
-test("resumes and saves SQL Injection progress for authenticated users", async () => {
+test("starts SQL Injection from step 1 and saves progress after interaction", async () => {
   setAuthTokens({ access: "access-token", refresh: "refresh-token" });
   global.fetch = jest
     .fn()
@@ -91,10 +91,15 @@ test("resumes and saves SQL Injection progress for authenticated users", async (
   renderLesson();
 
   await waitFor(() => {
-    expect(screen.getByText("Step 11")).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalled();
   });
 
-  fireEvent.click(screen.getByText("Step 11"));
+  expect(
+    screen.getByText(/This is the vulnerable application we will be trying to hack/i)
+  ).toBeInTheDocument();
+  expect(screen.queryByText("Step 11")).not.toBeInTheDocument();
+
+  fireEvent.click(screen.getByLabelText("Go to step 11"));
 
   await waitFor(() => {
     expect(global.fetch).toHaveBeenCalledWith(
@@ -102,7 +107,7 @@ test("resumes and saves SQL Injection progress for authenticated users", async (
       expect.objectContaining({
         method: "PATCH",
         body: JSON.stringify({
-          currentStep: 11,
+          currentStep: 10,
           totalSteps: 14,
           interactiveCompleted: false,
         }),

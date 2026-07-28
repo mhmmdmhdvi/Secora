@@ -15,7 +15,7 @@ function SQLInjectionExperience({ lesson }) {
   const [logs, setLogs] = useState([]);
   const [showError, setShowError] = useState(false);
   const [canSaveProgress, setCanSaveProgress] = useState(false);
-  const { isAuthenticated, isReady, progress, saveProgress } = useLessonProgress(
+  const { isAuthenticated, isReady, saveProgress } = useLessonProgress(
     lesson.slug
   );
 
@@ -24,22 +24,21 @@ function SQLInjectionExperience({ lesson }) {
   };
 
   useEffect(() => {
+    setStep(0);
+    setUsername("");
+    setPassword("");
+    setLogs([]);
+    setShowError(false);
     setCanSaveProgress(false);
   }, [lesson.slug]);
 
   useEffect(() => {
     if (!isReady) return;
-
-    if (progress) {
-      const savedStep = Math.min(progress.currentStep || 0, lesson.finalStep);
-      if (savedStep > 0) setStep(savedStep);
-    }
-
     setCanSaveProgress(true);
-  }, [isReady, lesson.finalStep, progress]);
+  }, [isReady]);
 
   useEffect(() => {
-    if (!canSaveProgress || !isAuthenticated) return;
+    if (!canSaveProgress || !isAuthenticated || step === 0) return;
 
     saveProgress({
       currentStep: step,

@@ -3,6 +3,7 @@ const READY_LESSONS = new Set([
   "cross-site-script-inclusion",
   "cross-site-scripting",
   "reflected-xss",
+  "dom-based-xss",
 ]);
 
 const PREVIEW_LESSONS = new Set([]);
