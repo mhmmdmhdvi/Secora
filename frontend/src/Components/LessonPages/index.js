@@ -52,6 +52,15 @@ const lessonComponents = {
   "dom-based-xss": lazy(() =>
     import("./dom-based-xss/DomBasedXss")
   ),
+  "dom-based-xss-guide": lazy(() =>
+    import("./dom-based-xss/dom-based-xss-guide/DomBasedXssGuide")
+  ),
+  "dom-based-xss-quiz": lazy(() =>
+    import("./dom-based-xss/DomBasedXssQuiz")
+  ),
+  "dom-based-xss-quiz-start": lazy(() =>
+    import("./dom-based-xss/DomBasedXssQuizStart")
+  ),
 };
 
 export default lessonComponents;

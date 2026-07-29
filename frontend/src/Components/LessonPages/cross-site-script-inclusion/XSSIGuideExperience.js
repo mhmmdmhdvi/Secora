@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
+import { useAppLanguage } from "../../../hooks/useAppLanguage";
 import TerminalBox from "../shared/TerminalBox";
 import { XSSIRichText } from "./XSSIRichText";
 
@@ -13,6 +14,9 @@ const METRIC_TONES = {
 };
 
 function XSSIGuideExperience({ guide }) {
+  const { language } = useAppLanguage();
+  const isPersian = language === "fa";
+
   return (
     <section className="mt-8 flex w-full flex-col items-center px-3 sm:mt-12 sm:px-5 lg:px-8">
       <div className="w-full max-w-4xl space-y-8 sm:space-y-10">
@@ -20,7 +24,10 @@ function XSSIGuideExperience({ guide }) {
           {guide.overview.title}
         </h1>
 
-        <div className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 lg:gap-10">
+        <div
+          dir={isPersian ? "rtl" : "ltr"}
+          className="grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 lg:gap-10"
+        >
           {guide.overview.metrics.map((metric) => (
             <MetricCard key={metric.label} metric={metric} />
           ))}

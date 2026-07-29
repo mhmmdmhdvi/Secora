@@ -140,9 +140,9 @@ FA_GUIDE = {
     "overview": {
         "title": "Cross-Site Script Inclusion (XSSI)",
         "metrics": [
-            {"icon": "📊", "label": "چقدر رایج است:", "value": "گاه‌به‌گاه", "tone": "orange"},
-            {"icon": "💣", "label": "سوءاستفاده از آن:", "value": "آسان", "tone": "red"},
-            {"icon": "🔥", "label": "شدت آسیب:", "value": "زیاد", "tone": "orange"},
+            {"icon": "📊", "label": "چقدر رایج است", "value": "گاه‌به‌گاه", "tone": "orange"},
+            {"icon": "💣", "label": "سوءاستفاده از آن", "value": "آسان", "tone": "red"},
+            {"icon": "🔥", "label": "شدت آسیب", "value": "زیاد", "tone": "orange"},
         ],
         "paragraphs": [
             [

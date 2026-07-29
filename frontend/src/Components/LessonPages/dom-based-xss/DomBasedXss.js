@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { normalizeLanguage } from "../../../i18n";
+import { navigateTo } from "../../../services/navigation";
 import { DomBasedXssError, DomBasedXssLoading } from "./DomBasedXssPageState";
 import DomBasedXssScene from "./DomBasedXssScene";
 import { useDomBasedXssLesson } from "./useDomBasedXssLesson";
@@ -24,7 +25,10 @@ function DomBasedXss() {
   const isFinalStep = step === lesson.finalStep;
 
   const handleInstructionClick = () => {
-    if (isFinalStep) return;
+    if (isFinalStep) {
+      navigateTo(lesson.guidePath);
+      return;
+    }
     setStep((current) => Math.min(current + 1, lesson.finalStep));
   };
 
@@ -66,13 +70,11 @@ function DomBasedXss() {
             <LessonStepText parts={lesson.steps[step]} />
           </div>
 
-          {!isFinalStep && (
-            <span
-              className={`absolute ${arrowPositionClass} bottom-3 text-sm text-text-muted sm:bottom-4 sm:text-base`}
-            >
-              {arrow}
-            </span>
-          )}
+          <span
+            className={`absolute ${arrowPositionClass} bottom-3 text-sm text-text-muted sm:bottom-4 sm:text-base`}
+          >
+            {arrow}
+          </span>
         </button>
 
         <DomBasedXssScene scene={scene} simulation={lesson.simulation} />

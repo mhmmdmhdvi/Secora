@@ -304,7 +304,7 @@ FA_GUIDE = {
         "metrics": [
             {"label": "چقدر رایج است", "value": "رایج", "icon": "📊", "tone": "orange"},
             {"label": "سوءاستفاده از آن", "value": "آسان", "icon": "💣", "tone": "red"},
-            {"label": "اثر حمله", "value": "زیان‌بار", "icon": "🔥", "tone": "rose"},
+            {"label": "شدت آسیب", "value": "زیان‌بار", "icon": "🔥", "tone": "rose"},
         ],
         "paragraphs": [
             [

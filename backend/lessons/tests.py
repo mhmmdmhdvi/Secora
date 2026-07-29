@@ -24,7 +24,10 @@ from .seed_content.reflected_xss import GUIDE as REFLECTED_XSS_GUIDE_SEED
 from .seed_content.reflected_xss import GUIDE_TRANSLATIONS as REFLECTED_XSS_GUIDE_TRANSLATIONS
 from .seed_content.reflected_xss import LESSON as REFLECTED_XSS_SEED
 from .seed_content.reflected_xss import LESSON_TRANSLATIONS as REFLECTED_XSS_TRANSLATIONS
+from .seed_content.dom_based_xss import GUIDE as DOM_BASED_XSS_GUIDE_SEED
+from .seed_content.dom_based_xss import GUIDE_TRANSLATIONS as DOM_BASED_XSS_GUIDE_TRANSLATIONS
 from .seed_content.dom_based_xss import LESSON as DOM_BASED_XSS_SEED
+from .seed_content.dom_based_xss import LESSON_TRANSLATIONS as DOM_BASED_XSS_TRANSLATIONS
 from .services import build_publish_readiness_errors, validate_revision_ready_for_publish
 from .validators import validate_block_config, validate_locale
 
@@ -379,6 +382,7 @@ class DomBasedXssSeedContentTests(SimpleTestCase):
     def test_seed_matches_dom_based_xss_lesson_shape(self):
         self.assertEqual(DOM_BASED_XSS_SEED["slug"], "dom-based-xss")
         self.assertEqual(DOM_BASED_XSS_SEED["simulation_key"], "dom-based-xss")
+        self.assertEqual(DOM_BASED_XSS_SEED["required_locales"], ("fa", "en"))
         self.assertEqual(len(DOM_BASED_XSS_SEED["steps"]), 9)
         self.assertEqual(DOM_BASED_XSS_SEED["total_steps"], 9)
         self.assertEqual(DOM_BASED_XSS_SEED["final_step"], 8)
@@ -390,7 +394,57 @@ class DomBasedXssSeedContentTests(SimpleTestCase):
         self.assertEqual(simulation["code"]["header"], "Dangerous use of innerHTML")
         self.assertEqual(simulation["scenes"]["6"]["type"], "mal-payload")
         self.assertIn("window.location", simulation["attack"]["payload_url"])
-        self.assertEqual(len(DOM_BASED_XSS_SEED["quiz"]["questions"]), 1)
+        self.assertEqual(len(DOM_BASED_XSS_SEED["quiz"]["questions"]), 3)
+        self.assertEqual(
+            DOM_BASED_XSS_SEED["quiz"]["questions"][0]["answers"][2]["is_correct"],
+            True,
+        )
+        self.assertEqual(
+            DOM_BASED_XSS_SEED["quiz"]["questions"][1]["answers"][2]["is_correct"],
+            True,
+        )
+        self.assertEqual(
+            DOM_BASED_XSS_SEED["quiz"]["questions"][2]["answers"][0]["is_correct"],
+            True,
+        )
+
+    def test_seed_includes_dom_based_xss_guide_and_quiz_cta(self):
+        self.assertEqual(DOM_BASED_XSS_GUIDE_SEED["overview"]["title"], "DOM-based XSS")
+        self.assertEqual(
+            DOM_BASED_XSS_GUIDE_SEED["quiz_cta"]["path"],
+            "/lessons/dom-based-xss-quiz",
+        )
+        self.assertEqual(
+            DOM_BASED_XSS_GUIDE_SEED["protection"]["sections"][0]["accordions"][0][
+                "title"
+            ],
+            "AngularJS",
+        )
+        self.assertIn(
+            "dangerouslySetInnerHTML",
+            DOM_BASED_XSS_GUIDE_SEED["protection"]["sections"][0]["accordions"][1][
+                "blocks"
+            ][1]["code"],
+        )
+
+    def test_seed_includes_dom_based_xss_persian_content(self):
+        self.assertIn("fa", DOM_BASED_XSS_TRANSLATIONS)
+        self.assertEqual(len(DOM_BASED_XSS_TRANSLATIONS["fa"]["steps"]), 9)
+        self.assertIn(
+            "مرورگر",
+            DOM_BASED_XSS_TRANSLATIONS["fa"]["steps"][0][0]["text"],
+        )
+        self.assertEqual(
+            DOM_BASED_XSS_TRANSLATIONS["fa"]["quiz"]["questions"][0]["answers"][2][
+                "is_correct"
+            ],
+            True,
+        )
+        self.assertIn("fa", DOM_BASED_XSS_GUIDE_TRANSLATIONS)
+        self.assertEqual(
+            DOM_BASED_XSS_GUIDE_TRANSLATIONS["fa"]["overview"]["title"],
+            "DOM-based XSS",
+        )
 
 
 def publishable_revision(sections=None, quiz=None):

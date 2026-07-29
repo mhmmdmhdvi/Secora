@@ -2,12 +2,14 @@ const STEP_BLOCK_PATTERN = /^step-\d+$/;
 
 export function mapApiLessonToDomBasedXssLesson(apiLesson) {
   const interactive = section(apiLesson, "interactive-demo");
+  const guideSection = section(apiLesson, "guide");
   const blocks = interactive.blocks || [];
   const stepBlocks = blocks
     .filter((block) => STEP_BLOCK_PATTERN.test(block.key))
     .sort(bySortOrder);
   const simulation = requiredBlock(blocks, "dom-based-xss-demo");
   const completion = requiredBlock(blocks, "completion");
+  const guide = requiredBlock(guideSection.blocks || [], "dom-based-xss-guide");
   const initialState =
     simulation.content?.initial_state ||
     simulation.content?.initialState ||
@@ -27,8 +29,22 @@ export function mapApiLessonToDomBasedXssLesson(apiLesson) {
     quizStartPath: initialState.quiz_start_path,
     lessonsPath: initialState.lessons_path,
     simulation: initialState.simulation,
+    quizIntro: mapQuizIntro(initialState.quiz_intro),
     completion: richParts(completion),
     steps: stepBlocks.map(richParts),
+    guide: guide.content.guide,
+    quiz: mapQuiz(apiLesson.quiz),
+  };
+}
+
+function mapQuizIntro(quizIntro) {
+  return {
+    eyebrow: quizIntro.eyebrow,
+    icon: quizIntro.icon,
+    title: quizIntro.title,
+    summary: quizIntro.summary,
+    startButton: quizIntro.start_button,
+    reviewButton: quizIntro.review_button,
   };
 }
 
@@ -54,6 +70,26 @@ function richParts(block) {
     throw new Error(`DOM-based XSS API block ${block.key} is missing rich parts.`);
   }
   return parts;
+}
+
+function mapQuiz(apiQuiz) {
+  if (!apiQuiz) return null;
+
+  const questions = apiQuiz.questions.map((question) => ({
+    key: question.key,
+    type: question.answers.length === 2 ? "truefalse" : "multi",
+    text: question.prompt,
+    options: question.answers.map((answer) => answer.text),
+    answer: question.answers.findIndex((answer) => answer.isCorrect),
+  }));
+
+  return {
+    passScore:
+      apiQuiz.passPercentage === 100
+        ? questions.length
+        : Math.ceil((questions.length * apiQuiz.passPercentage) / 100),
+    questions,
+  };
 }
 
 function bySortOrder(left, right) {

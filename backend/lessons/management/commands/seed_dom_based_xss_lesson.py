@@ -20,6 +20,8 @@ from lessons.models import (
     TranslationStatus,
 )
 from lessons.seed_content.dom_based_xss import (
+    GUIDE,
+    GUIDE_TRANSLATIONS,
     LESSON,
     LESSON_TRANSLATIONS,
     inline_plain_text,
@@ -122,6 +124,15 @@ def seed_revision(revision):
     )
     create_section_translations(interactive_section, "Interactive demo")
     create_interactive_blocks(interactive_section)
+
+    guide_section = LessonSection.objects.create(
+        revision=revision,
+        key="guide",
+        sort_order=2,
+    )
+    create_section_translations(guide_section, "Guide")
+    create_guide_block(guide_section)
+
     create_quiz(revision)
 
 
@@ -198,6 +209,25 @@ def create_interactive_blocks(section):
             body=inline_plain_text(completion_parts),
             heading="Next: prevent DOM-based XSS",
             content={"parts": completion_parts},
+        )
+
+
+def create_guide_block(section):
+    block = create_block(
+        section,
+        key="dom-based-xss-guide",
+        block_type=LessonBlock.Type.SIMULATION,
+        sort_order=1,
+        config={"registry_key": "dom-based-xss-guide"},
+    )
+    for locale in LESSON["required_locales"]:
+        guide = localized_guide(locale)
+        LessonBlockTranslation.objects.create(
+            block=block,
+            locale=locale,
+            heading=guide["overview"]["title"],
+            body="DOM-based XSS guide",
+            content={"guide": guide},
         )
 
 
@@ -281,3 +311,7 @@ def simulation_initial_state(lesson_data):
 
 def localized_lesson(locale):
     return LESSON_TRANSLATIONS.get(locale, LESSON)
+
+
+def localized_guide(locale):
+    return GUIDE_TRANSLATIONS.get(locale, GUIDE)

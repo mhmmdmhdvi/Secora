@@ -16,7 +16,10 @@ export default function SectionOverview({ overview, isPersian = false }) {
         {overview.title}
       </h1>
 
-      <div className="mb-8 grid w-full max-w-3xl grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-3 sm:gap-6 lg:gap-10">
+      <div
+        dir={isPersian ? "rtl" : "ltr"}
+        className="mb-8 grid w-full max-w-3xl grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-3 sm:gap-6 lg:gap-10"
+      >
         {overview.metrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}

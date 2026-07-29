@@ -1,6 +1,7 @@
 import GuideCodeSamples from "./GuideCodeSamples";
 import GuideTerminalBox from "./GuideTerminalBox";
 import { GuideRichText } from "./GuideRichText";
+import { useAppLanguage } from "../../../../hooks/useAppLanguage";
 
 const METRIC_TONES = {
   orange:
@@ -12,10 +13,13 @@ const METRIC_TONES = {
 };
 
 export default function SQLInjectionGuideExperience({ guide }) {
+  const { language } = useAppLanguage();
+  const isPersian = language === "fa";
+
   return (
     <div className="min-h-screen w-full bg-app px-3 py-8 text-text sm:px-5 sm:py-10 lg:px-8">
       <div className="mx-auto max-w-6xl space-y-12 sm:space-y-16 lg:space-y-20">
-        <Overview overview={guide.overview} />
+        <Overview overview={guide.overview} isPersian={isPersian} />
         <Risks risks={guide.risks} />
         <Protection protection={guide.protection} />
         <GuideCodeSamples codeSamples={guide.code_samples} />
@@ -24,14 +28,17 @@ export default function SQLInjectionGuideExperience({ guide }) {
   );
 }
 
-function Overview({ overview }) {
+function Overview({ overview, isPersian = false }) {
   return (
     <section className="flex w-full flex-col items-center">
       <h1 className="mb-6 break-words text-center text-3xl font-bold sm:mb-8 sm:text-4xl lg:text-5xl">
         {overview.title}
       </h1>
 
-      <div className="mb-8 grid w-full max-w-3xl grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-3 sm:gap-6 lg:gap-10">
+      <div
+        dir={isPersian ? "rtl" : "ltr"}
+        className="mb-8 grid w-full max-w-3xl grid-cols-1 gap-4 sm:mb-10 sm:grid-cols-3 sm:gap-6 lg:gap-10"
+      >
         {overview.metrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}

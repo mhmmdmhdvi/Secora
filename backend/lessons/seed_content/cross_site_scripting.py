@@ -431,9 +431,9 @@ GUIDE_TRANSLATIONS = {
         "overview": {
             **GUIDE["overview"],
             "metrics": [
-                {"icon": "📊", "label": "چقدر رایج است", "value": "زیاد", "tone": "orange"},
+                {"icon": "📊", "label": "چقدر رایج است", "value": "رایج", "tone": "orange"},
                 {"icon": "💣", "label": "سوءاستفاده از آن", "value": "آسان", "tone": "red"},
-                {"icon": "🔥", "label": "شدت آسیب", "value": "زیاد", "tone": "rose"},
+                {"icon": "🔥", "label": "شدت آسیب", "value": "زیان‌بار", "tone": "rose"},
             ],
             "paragraphs": [
                 [
