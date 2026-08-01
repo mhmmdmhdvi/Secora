@@ -402,46 +402,92 @@ class MissingTranslation:
 
 
 def unlock_progress_achievements(progress, event_type):
+    unlocked = []
+
     if event_type == LearningXpEvent.Type.INTERACTIVE_COMPLETED:
-        unlock_achievement(
+        achievement = unlock_achievement(
             progress.user,
             "firstExploit",
             lesson=progress.lesson,
             revision=progress.revision,
         )
+        if achievement:
+            unlocked.append(achievement)
     if event_type == LearningXpEvent.Type.GUIDE_COMPLETED:
-        unlock_achievement(
+        achievement = unlock_achievement(
             progress.user,
             "firstGuideRead",
             lesson=progress.lesson,
             revision=progress.revision,
         )
+        if achievement:
+            unlocked.append(achievement)
     if event_type == LearningXpEvent.Type.LESSON_COMPLETED:
-        unlock_lesson_completion_achievements(progress.user, progress.lesson, progress.revision)
+        unlocked.extend(
+            unlock_lesson_completion_achievements(
+                progress.user,
+                progress.lesson,
+                progress.revision,
+            )
+        )
+
+    return unlocked
 
 
 def unlock_quiz_achievements(attempt):
+    unlocked = []
+
     if attempt.passed:
-        unlock_achievement(
+        achievement = unlock_achievement(
             attempt.user,
             "firstQuizPassed",
             lesson=attempt.lesson,
             revision=attempt.revision,
         )
-        unlock_lesson_completion_achievements(attempt.user, attempt.lesson, attempt.revision)
+        if achievement:
+            unlocked.append(achievement)
+        unlocked.extend(
+            unlock_lesson_completion_achievements(
+                attempt.user,
+                attempt.lesson,
+                attempt.revision,
+            )
+        )
     if attempt.score == attempt.total_questions:
-        unlock_achievement(
+        achievement = unlock_achievement(
             attempt.user,
             "firstPerfectQuiz",
             lesson=attempt.lesson,
             revision=attempt.revision,
         )
+        if achievement:
+            unlocked.append(achievement)
+
+    return unlocked
 
 
 def unlock_lesson_completion_achievements(user, lesson, revision):
-    unlock_achievement(user, "firstLessonCompleted", lesson=lesson, revision=revision)
+    unlocked = []
+    achievement = unlock_achievement(
+        user,
+        "firstLessonCompleted",
+        lesson=lesson,
+        revision=revision,
+    )
+    if achievement:
+        unlocked.append(achievement)
+
     if lesson.slug == "sql-injection":
-        unlock_achievement(user, "sqlInjectionCompleted", lesson=lesson, revision=revision)
+        achievement = unlock_achievement(
+            user,
+            "sqlInjectionCompleted",
+            lesson=lesson,
+            revision=revision,
+        )
+        if achievement:
+            unlocked.append(achievement)
+
+    return unlocked
 
 
 def build_xp_profile(user):

@@ -183,6 +183,7 @@
     "previewLesson": "Preview Lesson",
     "minutes": "{{minutes}} min",
     "quizScore": "Best quiz: {{score}}/{{total}}",
+    "quizScoreCompact": "Quiz {{score}}/{{total}}",
     "availability": {
       "ready": "Ready",
       "preview": "Preview",
@@ -301,5 +302,17 @@
     "pleaseTryAgain": "Please try again.",
     "tryAgain": "Try again",
     "routeError": "This page could not be loaded. Please try again, or go back to the lessons page."
+  },
+  "rewards": {
+    "xpGained": "+{{xp}} XP",
+    "xpSubtitle": "Progress saved",
+    "levelUpEyebrow": "Level up",
+    "levelUpTitle": "Level {{level}} reached",
+    "levelUpDescription": "You are now {{levelName}} with {{xp}} total XP.",
+    "levelBefore": "Level {{level}}",
+    "levelAfter": "Level {{level}}",
+    "achievementEyebrow": "Achievement unlocked",
+    "continue": "Continue learning",
+    "close": "Close reward"
   }
 }

@@ -31,8 +31,8 @@ function LessonCatalogFilters({
   const { t } = useTranslation();
 
   return (
-    <div className="mb-8 w-full max-w-5xl">
-      <div className="relative mx-auto max-w-xl">
+    <div className="mb-8 w-full rounded-[1.6rem] border border-border bg-surface/80 p-4 shadow-sm shadow-black/5 sm:p-5">
+      <div className="relative">
         <FiSearch
           className="absolute top-1/2 -translate-y-1/2 text-text-muted text-xl"
           style={{ insetInlineStart: "1rem" }}
@@ -51,7 +51,7 @@ function LessonCatalogFilters({
 
       <div
         className={classNames(
-          "mt-5 grid grid-cols-1 gap-3",
+          "mt-4 grid grid-cols-1 gap-3",
           isAuthenticated ? "sm:grid-cols-3" : "sm:grid-cols-2"
         )}
       >

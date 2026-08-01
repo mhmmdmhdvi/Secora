@@ -1,11 +1,14 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
+import { useAppLanguage } from "../../hooks/useAppLanguage";
 import { useTheme } from "../../hooks/useTheme";
 
 function ToastProvider() {
+  const { language } = useAppLanguage();
   const { resolvedTheme } = useTheme();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const position = isMobile ? "top-center" : language === "fa" ? "top-left" : "top-right";
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 640);
@@ -15,7 +18,7 @@ function ToastProvider() {
 
   return (
     <ToastContainer
-      position={isMobile ? "top-center" : "top-right"}
+      position={position}
       autoClose={3000}
       newestOnTop
       closeOnClick

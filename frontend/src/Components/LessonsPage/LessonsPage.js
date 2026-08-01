@@ -67,12 +67,8 @@ function LessonsPage() {
   const isBookmarkEmptyState = showSavedOnly && bookmarkSlugs.size === 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-6 sm:py-8 md:py-10">
-      <div className="flex flex-col items-center">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3 text-center">
-          {t("lessons.explore")}
-        </h1>
-
+    <div className="mx-auto w-full max-w-7xl py-6 sm:py-8 md:py-10">
+      <div className="flex flex-col">
         <LessonCatalogFilters
           difficulty={difficulty}
           isAuthenticated={isAuthenticated}
@@ -86,7 +82,7 @@ function LessonsPage() {
           topic={topic}
         />
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
+        <div className="grid w-full grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:gap-7 xl:grid-cols-3">
           {filteredLessons.length > 0 ? (
             filteredLessons.map((lesson) => (
               <LessonCard

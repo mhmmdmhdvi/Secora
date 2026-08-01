@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
 from learning.models import LessonBookmark, LessonFeedback, LessonProgress, QuizAttempt
+from learning.services import ACHIEVEMENTS
+
+
+ACHIEVEMENT_META_BY_CODE = {
+    achievement["code"]: achievement for achievement in ACHIEVEMENTS
+}
 
 
 class LessonProgressUpdateSerializer(serializers.Serializer):
@@ -171,4 +177,59 @@ def serialize_quiz_attempt(attempt):
         "answers": attempt.answers,
         "startedAt": attempt.started_at,
         "completedAt": attempt.completed_at,
+    }
+
+
+def serialize_reward_summary(
+    previous_xp,
+    current_xp,
+    xp_events,
+    achievements,
+    xp_awarded=None,
+):
+    if xp_awarded is None:
+        xp_awarded = sum(event.xp_amount for event in xp_events if event is not None)
+    previous_level = previous_xp.get("level", 1)
+    current_level = current_xp.get("level", previous_level)
+
+    return {
+        "xpAwarded": xp_awarded,
+        "xpEvents": [
+            {
+                "eventType": event.event_type,
+                "xpAmount": event.xp_amount,
+                "lessonSlug": event.lesson_slug,
+                "createdAt": event.created_at,
+            }
+            for event in xp_events
+            if event is not None
+        ],
+        "levelUp": (
+            {
+                "fromLevel": previous_level,
+                "toLevel": current_level,
+                "levelCode": current_xp.get("levelCode", ""),
+                "levelName": current_xp.get("levelName", ""),
+                "totalXp": current_xp.get("totalXp", 0),
+            }
+            if current_level > previous_level
+            else None
+        ),
+        "achievementsUnlocked": [
+            serialize_unlocked_achievement(achievement)
+            for achievement in achievements
+            if achievement is not None
+        ],
+    }
+
+
+def serialize_unlocked_achievement(achievement):
+    meta = ACHIEVEMENT_META_BY_CODE.get(achievement.code, {})
+
+    return {
+        "code": achievement.code,
+        "icon": meta.get("icon", "award"),
+        "category": meta.get("category", "completion"),
+        "lessonSlug": achievement.lesson_slug,
+        "unlockedAt": achievement.unlocked_at,
     }

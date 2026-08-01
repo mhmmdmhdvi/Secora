@@ -183,6 +183,7 @@
     "previewLesson": "پیش‌نمایش درس",
     "minutes": "{{minutes}} دقیقه",
     "quizScore": "بهترین آزمون: {{score}} از {{total}}",
+    "quizScoreCompact": "آزمون {{score}}/{{total}}",
     "availability": {
       "ready": "آماده",
       "preview": "پیش‌نمایش",
@@ -345,5 +346,17 @@
     "pleaseTryAgain": "لطفاً دوباره تلاش کن.",
     "tryAgain": "تلاش دوباره",
     "routeError": "این صفحه بارگذاری نشد. لطفاً دوباره تلاش کن یا به صفحه درس‌ها برگرد."
+  },
+  "rewards": {
+    "xpGained": "+{{xp}} XP",
+    "xpSubtitle": "پیشرفتت ذخیره شد",
+    "levelUpEyebrow": "ارتقای سطح",
+    "levelUpTitle": "به سطح {{level}} رسیدی",
+    "levelUpDescription": "حالا {{levelName}} هستی و در مجموع {{xp}} XP داری.",
+    "levelBefore": "سطح {{level}}",
+    "levelAfter": "سطح {{level}}",
+    "achievementEyebrow": "دستاورد جدید باز شد",
+    "continue": "ادامه یادگیری",
+    "close": "بستن پاداش"
   }
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "../Components/ScrollToTop";
+import RewardProvider from "../Components/Rewards/RewardProvider";
 import ToastProvider from "../Components/UI/ToastProvider";
 import { AuthProvider } from "../contexts/AuthContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
@@ -12,7 +13,7 @@ function AppProviders({ children }) {
         <AuthProvider>
           <ScrollToTop />
           <ToastProvider />
-          {children}
+          <RewardProvider>{children}</RewardProvider>
         </AuthProvider>
       </ThemeProvider>
     </Router>

@@ -5,6 +5,7 @@ import { FiArrowRight, FiCheckCircle, FiXCircle } from "react-icons/fi";
 
 import { useAppLanguage } from "../../../hooks/useAppLanguage";
 import { useAuth } from "../../../hooks/useAuth";
+import { useRewards } from "../../Rewards/RewardProvider";
 import { saveQuizAttempt } from "../../../services/learningApi";
 import LessonFeedbackCard from "./LessonFeedbackCard";
 
@@ -13,6 +14,7 @@ function QuizRunnerExperience({ lesson }) {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const { language } = useAppLanguage();
+  const { showRewards } = useRewards();
   const { questions } = lesson.quiz;
   const isPersian = language === "fa";
 
@@ -85,6 +87,7 @@ function QuizRunnerExperience({ lesson }) {
       { locale: language }
     )
       .then((payload) => {
+        showRewards(payload?.rewards);
         if (payload?.recommendation) {
           setRecommendation(payload.recommendation);
         }

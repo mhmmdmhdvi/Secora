@@ -39,6 +39,7 @@ from .serializers import (
     serialize_progress,
     serialize_quiz_attempt,
     serialize_recommendation,
+    serialize_reward_summary,
     serialize_xp_profile,
 )
 
@@ -147,25 +148,55 @@ class LessonProgressDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, slug):
+        previous_xp = build_xp_profile(request.user)
         progress = get_or_create_progress(request.user, slug)
-        return Response(serialize_progress(progress))
+        current_xp = build_xp_profile(request.user)
+        xp_awarded = max(
+            current_xp.get("totalXp", 0) - previous_xp.get("totalXp", 0),
+            0,
+        )
+
+        return Response(
+            serialize_progress(progress)
+            | {
+                "xp": current_xp,
+                "rewards": serialize_reward_summary(
+                    previous_xp=previous_xp,
+                    current_xp=current_xp,
+                    xp_events=[],
+                    achievements=[],
+                    xp_awarded=xp_awarded,
+                ),
+            }
+        )
 
     def patch(self, request, slug):
         serializer = LessonProgressUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        previous_xp = build_xp_profile(request.user)
 
         with transaction.atomic():
             progress = get_or_create_progress(request.user, slug, lock=True)
-            xp_events = apply_progress_update(progress, serializer.validated_data)
+            reward_result = apply_progress_update(progress, serializer.validated_data)
             progress.touch()
             progress.save()
+
+        current_xp = build_xp_profile(request.user)
 
         return Response(
             serialize_progress(progress)
             | {
                 "achievements": build_achievement_profile(request.user),
-                "xp": build_xp_profile(request.user),
-                "xpAwarded": sum(event.xp_amount for event in xp_events),
+                "xp": current_xp,
+                "xpAwarded": sum(
+                    event.xp_amount for event in reward_result["xp_events"]
+                ),
+                "rewards": serialize_reward_summary(
+                    previous_xp=previous_xp,
+                    current_xp=current_xp,
+                    xp_events=reward_result["xp_events"],
+                    achievements=reward_result["achievements"],
+                ),
             }
         )
 
@@ -180,8 +211,11 @@ class QuizAttemptCreateView(APIView):
         locale = validated_locale(request)
         revision = published_revision_for_lesson(slug)
         passed = quiz_passed(revision, data["score"], data["totalQuestions"])
+        previous_xp = build_xp_profile(request.user)
 
         with transaction.atomic():
+            xp_events = []
+            unlocked_achievements = []
             first_attempt = not QuizAttempt.objects.filter(
                 user=request.user,
                 lesson=revision.lesson,
@@ -200,28 +234,30 @@ class QuizAttemptCreateView(APIView):
             progress.quiz_completed_at = attempt.completed_at
             if passed:
                 progress.lesson_completed_at = progress.lesson_completed_at or attempt.completed_at
-                award_lesson_xp(
+                xp_events.append(award_lesson_xp(
                     request.user,
                     revision.lesson,
                     revision,
                     LearningXpEvent.Type.QUIZ_PASSED,
-                )
+                ))
                 if first_attempt:
-                    award_lesson_xp(
+                    xp_events.append(award_lesson_xp(
                         request.user,
                         revision.lesson,
                         revision,
                         LearningXpEvent.Type.QUIZ_FIRST_TRY,
-                    )
-                award_lesson_xp(
+                    ))
+                xp_events.append(award_lesson_xp(
                     request.user,
                     revision.lesson,
                     revision,
                     LearningXpEvent.Type.LESSON_COMPLETED,
-                )
-                unlock_quiz_achievements(attempt)
+                ))
+                unlocked_achievements.extend(unlock_quiz_achievements(attempt))
             progress.touch()
             progress.save()
+
+        current_xp = build_xp_profile(request.user)
 
         return Response(
             {
@@ -234,7 +270,14 @@ class QuizAttemptCreateView(APIView):
                 )
                 if passed
                 else None,
-                "xp": build_xp_profile(request.user),
+                "xp": current_xp,
+                "xpAwarded": sum(event.xp_amount for event in xp_events if event),
+                "rewards": serialize_reward_summary(
+                    previous_xp=previous_xp,
+                    current_xp=current_xp,
+                    xp_events=xp_events,
+                    achievements=unlocked_achievements,
+                ),
             },
             status=201,
         )
@@ -243,6 +286,7 @@ class QuizAttemptCreateView(APIView):
 def apply_progress_update(progress, data):
     now = timezone.now()
     award_events = []
+    unlocked_achievements = []
     current_step = data.get("currentStep", progress.current_step)
     total_steps = data.get("totalSteps", progress.total_steps)
 
@@ -266,9 +310,11 @@ def apply_progress_update(progress, data):
                     LearningXpEvent.Type.INTERACTIVE_COMPLETED,
                 )
             )
-            unlock_progress_achievements(
-                progress,
-                LearningXpEvent.Type.INTERACTIVE_COMPLETED,
+            unlocked_achievements.extend(
+                unlock_progress_achievements(
+                    progress,
+                    LearningXpEvent.Type.INTERACTIVE_COMPLETED,
+                )
             )
     if data.get("guideCompleted"):
         if progress.guide_completed_at is None:
@@ -281,9 +327,11 @@ def apply_progress_update(progress, data):
                     LearningXpEvent.Type.GUIDE_COMPLETED,
                 )
             )
-            unlock_progress_achievements(
-                progress,
-                LearningXpEvent.Type.GUIDE_COMPLETED,
+            unlocked_achievements.extend(
+                unlock_progress_achievements(
+                    progress,
+                    LearningXpEvent.Type.GUIDE_COMPLETED,
+                )
             )
     if data.get("quizCompleted"):
         progress.quiz_completed_at = progress.quiz_completed_at or now
@@ -298,12 +346,17 @@ def apply_progress_update(progress, data):
                     LearningXpEvent.Type.LESSON_COMPLETED,
                 )
             )
-            unlock_progress_achievements(
-                progress,
-                LearningXpEvent.Type.LESSON_COMPLETED,
+            unlocked_achievements.extend(
+                unlock_progress_achievements(
+                    progress,
+                    LearningXpEvent.Type.LESSON_COMPLETED,
+                )
             )
 
-    return [event for event in award_events if event is not None]
+    return {
+        "xp_events": [event for event in award_events if event is not None],
+        "achievements": unlocked_achievements,
+    }
 
 
 def validated_locale(request):

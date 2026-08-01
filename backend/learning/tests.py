@@ -282,6 +282,11 @@ class LearningApiTests(TestCase):
         self.assertEqual(response.data["currentStep"], 11)
         self.assertEqual(response.data["totalSteps"], 14)
         self.assertIsNotNone(response.data["interactiveCompletedAt"])
+        self.assertEqual(response.data["rewards"]["xpAwarded"], 10)
+        self.assertEqual(
+            response.data["rewards"]["achievementsUnlocked"][0]["code"],
+            "firstExploit",
+        )
 
         progress = LessonProgress.objects.get(user=self.user, lesson=self.lesson)
         self.assertEqual(progress.revision, self.revision)
@@ -336,6 +341,19 @@ class LearningApiTests(TestCase):
         self.assertEqual(response.data["progress"]["bestQuizTotal"], 3)
         self.assertIsNotNone(response.data["progress"]["quizCompletedAt"])
         self.assertIsNotNone(response.data["progress"]["lessonCompletedAt"])
+        self.assertEqual(response.data["rewards"]["xpAwarded"], 35)
+        self.assertEqual(
+            {
+                achievement["code"]
+                for achievement in response.data["rewards"]["achievementsUnlocked"]
+            },
+            {
+                "firstQuizPassed",
+                "firstPerfectQuiz",
+                "firstLessonCompleted",
+                "sqlInjectionCompleted",
+            },
+        )
         self.assertEqual(
             response.data["recommendation"]["lesson"]["slug"],
             "cross-site-script-inclusion",
