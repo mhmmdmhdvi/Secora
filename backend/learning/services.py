@@ -46,7 +46,7 @@ LEVELS = [
     },
 ]
 
-ACHIEVEMENTS = [
+GENERAL_ACHIEVEMENTS = [
     {
         "code": "firstExploit",
         "icon": "zap",
@@ -73,10 +73,80 @@ ACHIEVEMENTS = [
         "category": "completion",
     },
     {
-        "code": "sqlInjectionCompleted",
-        "icon": "shield",
-        "category": "completion",
+        "code": "fiveLessonsCompleted",
+        "icon": "award",
+        "category": "milestone",
     },
+    {
+        "code": "tenLessonsCompleted",
+        "icon": "target",
+        "category": "milestone",
+    },
+    {
+        "code": "twentyLessonsCompleted",
+        "icon": "shield",
+        "category": "milestone",
+    },
+]
+
+LESSON_ACHIEVEMENTS = [
+    {"code": "sqlInjectionCompleted", "lesson_slug": "sql-injection", "icon": "shield", "category": "lesson"},
+    {"code": "xssiCompleted", "lesson_slug": "cross-site-script-inclusion", "icon": "code", "category": "lesson"},
+    {"code": "storedXssCompleted", "lesson_slug": "cross-site-scripting", "icon": "code", "category": "lesson"},
+    {"code": "reflectedXssCompleted", "lesson_slug": "reflected-xss", "icon": "zap", "category": "lesson"},
+    {"code": "domXssCompleted", "lesson_slug": "dom-based-xss", "icon": "code", "category": "lesson"},
+    {"code": "xxeCompleted", "lesson_slug": "xml-external-entities", "icon": "database", "category": "lesson"},
+    {"code": "xmlBombsCompleted", "lesson_slug": "xml-bombs", "icon": "zap", "category": "lesson"},
+    {"code": "weakSessionIdsCompleted", "lesson_slug": "weak-session-ids", "icon": "key", "category": "lesson"},
+    {"code": "userEnumerationCompleted", "lesson_slug": "user-enumeration", "icon": "search", "category": "lesson"},
+    {"code": "unencryptedCommunicationCompleted", "lesson_slug": "unencrypted-communication", "icon": "globe", "category": "lesson"},
+    {"code": "toxicDependenciesCompleted", "lesson_slug": "toxic-dependencies", "icon": "package", "category": "lesson"},
+    {"code": "subdomainSquattingCompleted", "lesson_slug": "subdomain-squatting", "icon": "globe", "category": "lesson"},
+    {"code": "ssrfCompleted", "lesson_slug": "server-side-request-forgery", "icon": "server", "category": "lesson"},
+    {"code": "sslStrippingCompleted", "lesson_slug": "ssl-stripping", "icon": "globe", "category": "lesson"},
+    {"code": "sessionFixationCompleted", "lesson_slug": "session-fixation", "icon": "key", "category": "lesson"},
+    {"code": "remoteCodeExecutionCompleted", "lesson_slug": "remote-code-execution", "icon": "terminal", "category": "lesson"},
+    {"code": "regexInjectionCompleted", "lesson_slug": "regex-injection", "icon": "terminal", "category": "lesson"},
+    {"code": "prototypePollutionCompleted", "lesson_slug": "prototype-pollution", "icon": "code", "category": "lesson"},
+    {"code": "privilegeEscalationCompleted", "lesson_slug": "privilege-escalation", "icon": "shield", "category": "lesson"},
+    {"code": "passwordMismanagementCompleted", "lesson_slug": "password-mismanagement", "icon": "key", "category": "lesson"},
+    {"code": "openRedirectsCompleted", "lesson_slug": "open-redirects", "icon": "globe", "category": "lesson"},
+    {"code": "massAssignmentCompleted", "lesson_slug": "mass-assignment", "icon": "database", "category": "lesson"},
+    {"code": "malvertisingCompleted", "lesson_slug": "malvertising", "icon": "zap", "category": "lesson"},
+    {"code": "loggingMonitoringCompleted", "lesson_slug": "logging-and-monitoring", "icon": "book", "category": "lesson"},
+    {"code": "laxSecuritySettingsCompleted", "lesson_slug": "lax-security-settings", "icon": "shield", "category": "lesson"},
+    {"code": "insecureDesignCompleted", "lesson_slug": "insecure-design", "icon": "target", "category": "lesson"},
+    {"code": "informationLeakageCompleted", "lesson_slug": "information-leakage", "icon": "database", "category": "lesson"},
+    {"code": "hostHeaderPoisoningCompleted", "lesson_slug": "host-header-poisoning", "icon": "server", "category": "lesson"},
+    {"code": "fileUploadCompleted", "lesson_slug": "file-upload-vulnerabilities", "icon": "upload", "category": "lesson"},
+    {"code": "emailSpoofingCompleted", "lesson_slug": "email-spoofing", "icon": "mail", "category": "lesson"},
+    {"code": "downgradeAttacksCompleted", "lesson_slug": "downgrade-attacks", "icon": "globe", "category": "lesson"},
+    {"code": "dnsPoisoningCompleted", "lesson_slug": "dns-poisoning", "icon": "globe", "category": "lesson"},
+    {"code": "directoryTraversalCompleted", "lesson_slug": "directory-traversal", "icon": "folder", "category": "lesson"},
+    {"code": "dosCompleted", "lesson_slug": "denial-of-service-attacks", "icon": "server", "category": "lesson"},
+    {"code": "csrfCompleted", "lesson_slug": "cross-site-request-forgery", "icon": "shield", "category": "lesson"},
+    {"code": "commandExecutionCompleted", "lesson_slug": "command-execution", "icon": "terminal", "category": "lesson"},
+    {"code": "clickjackingCompleted", "lesson_slug": "clickjacking", "icon": "target", "category": "lesson"},
+    {"code": "bufferOverflowsCompleted", "lesson_slug": "buffer-overflows", "icon": "server", "category": "lesson"},
+    {"code": "brokenAccessControlCompleted", "lesson_slug": "broken-access-control", "icon": "shield", "category": "lesson"},
+    {"code": "aiPromptInjectionCompleted", "lesson_slug": "ai-prompt-injection", "icon": "cpu", "category": "lesson"},
+    {"code": "aiDataExtractionCompleted", "lesson_slug": "ai-data-extraction-attacks", "icon": "database", "category": "lesson"},
+    {"code": "aiBiasCompleted", "lesson_slug": "ai-bias-and-unreliability", "icon": "cpu", "category": "lesson"},
+]
+
+ACHIEVEMENTS = [
+    *GENERAL_ACHIEVEMENTS,
+    *LESSON_ACHIEVEMENTS,
+]
+
+LESSON_ACHIEVEMENTS_BY_SLUG = {
+    achievement["lesson_slug"]: achievement for achievement in LESSON_ACHIEVEMENTS
+}
+
+LESSON_COMPLETION_MILESTONES = [
+    (5, "fiveLessonsCompleted"),
+    (10, "tenLessonsCompleted"),
+    (20, "twentyLessonsCompleted"),
 ]
 
 
@@ -113,21 +183,34 @@ def build_achievement_profile(user):
         achievement.code: achievement
         for achievement in LearningAchievement.objects.filter(user=user)
     }
+    published_lesson_slugs = set(
+        Lesson.objects.filter(
+            status=Lesson.Status.PUBLISHED,
+            revisions__status=LessonRevision.Status.PUBLISHED,
+        )
+        .distinct()
+        .values_list("slug", flat=True)
+    )
     results = []
 
     for achievement in ACHIEVEMENTS:
+        lesson_slug = achievement.get("lesson_slug", "")
+        is_available = not lesson_slug or lesson_slug in published_lesson_slugs
         unlocked = unlocked_by_code.get(achievement["code"])
+        is_unlocked = unlocked is not None and is_available
         results.append(
             {
                 **achievement,
-                "isUnlocked": unlocked is not None,
-                "unlockedAt": unlocked.unlocked_at if unlocked else None,
-                "lessonSlug": unlocked.lesson_slug if unlocked else "",
+                "isAvailable": is_available,
+                "isUnlocked": is_unlocked,
+                "unlockedAt": unlocked.unlocked_at if is_unlocked else None,
+                "lessonSlug": lesson_slug or (unlocked.lesson_slug if unlocked else ""),
+                "lockReason": "" if is_available else "lessonComingSoon",
             }
         )
 
     return {
-        "unlockedCount": len(unlocked_by_code),
+        "unlockedCount": sum(1 for achievement in results if achievement["isUnlocked"]),
         "totalCount": len(ACHIEVEMENTS),
         "results": results,
     }
@@ -477,17 +560,36 @@ def unlock_lesson_completion_achievements(user, lesson, revision):
     if achievement:
         unlocked.append(achievement)
 
-    if lesson.slug == "sql-injection":
+    lesson_achievement = LESSON_ACHIEVEMENTS_BY_SLUG.get(lesson.slug)
+    if lesson_achievement:
         achievement = unlock_achievement(
             user,
-            "sqlInjectionCompleted",
+            lesson_achievement["code"],
             lesson=lesson,
             revision=revision,
         )
         if achievement:
             unlocked.append(achievement)
 
+    completed_count = completed_lesson_count_including(user, lesson)
+    for threshold, code in LESSON_COMPLETION_MILESTONES:
+        if completed_count >= threshold:
+            achievement = unlock_achievement(user, code)
+            if achievement:
+                unlocked.append(achievement)
+
     return unlocked
+
+
+def completed_lesson_count_including(user, lesson):
+    completed_slugs = set(
+        LessonProgress.objects.filter(
+            user=user,
+            lesson_completed_at__isnull=False,
+        ).values_list("lesson__slug", flat=True)
+    )
+    completed_slugs.add(lesson.slug)
+    return len(completed_slugs)
 
 
 def build_xp_profile(user):

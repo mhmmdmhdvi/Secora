@@ -84,7 +84,7 @@ function LessonCard({
         className="flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6"
         dir={isPersian ? "rtl" : "ltr"}
       >
-        <div className="mb-4 flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap justify-center gap-2">
           <MetaChip>{t(`lessons.difficulties.${difficulty}`)}</MetaChip>
           <MetaChip>{t(`lessons.topics.${topic}`)}</MetaChip>
           <MetaChip>
@@ -93,7 +93,7 @@ function LessonCard({
           </MetaChip>
         </div>
 
-        <h3 className="text-xl font-black leading-8 text-text" dir="ltr">
+        <h3 className="text-center text-xl font-black leading-8 text-text" dir="ltr">
           {title}
         </h3>
 

@@ -127,9 +127,7 @@ function QuizRunnerExperience({ lesson }) {
               )}
 
               <LessonFeedbackCard
-                autoOpen
                 lessonSlug={lesson.slug}
-                showTrigger={false}
                 source="quiz"
               />
 
@@ -163,9 +161,7 @@ function QuizRunnerExperience({ lesson }) {
               </div>
 
               <LessonFeedbackCard
-                autoOpen
                 lessonSlug={lesson.slug}
-                showTrigger={false}
                 source="quiz"
               />
             </>

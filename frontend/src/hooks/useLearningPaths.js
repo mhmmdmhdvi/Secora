@@ -2,20 +2,21 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
-import { useAppLanguage } from "./useAppLanguage";
 import { useAuth } from "./useAuth";
-import { fetchLearningPaths } from "../services/learningApi";
+import { buildLearningRoadmaps } from "../data/learningRoadmaps";
+import { fetchLessonCatalogProgress } from "../services/learningApi";
 
 export function useLearningPaths() {
   const { isAuthenticated } = useAuth();
-  const { language } = useAppLanguage();
   const { t } = useTranslation();
-  const [paths, setPaths] = useState([]);
+  const [paths, setPaths] = useState(() =>
+    buildLearningRoadmaps({ progressBySlug: {}, t })
+  );
   const [isLoading, setIsLoading] = useState(isAuthenticated);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setPaths([]);
+      setPaths(buildLearningRoadmaps({ progressBySlug: {}, t }));
       setIsLoading(false);
       return undefined;
     }
@@ -23,11 +24,21 @@ export function useLearningPaths() {
     const controller = new AbortController();
     setIsLoading(true);
 
-    fetchLearningPaths(language, { signal: controller.signal })
-      .then((payload) => setPaths(payload?.results || []))
+    fetchLessonCatalogProgress({ signal: controller.signal })
+      .then((payload) => {
+        const progressBySlug = Object.fromEntries(
+          (payload?.results || []).map((progress) => [
+            progress.lessonSlug,
+            progress,
+          ])
+        );
+
+        setPaths(buildLearningRoadmaps({ progressBySlug, t }));
+      })
       .catch((error) => {
         if (error?.name !== "AbortError") {
           toast.error(t("paths.loadFailed"));
+          setPaths(buildLearningRoadmaps({ progressBySlug: {}, t }));
         }
       })
       .finally(() => {
@@ -37,7 +48,7 @@ export function useLearningPaths() {
       });
 
     return () => controller.abort();
-  }, [isAuthenticated, language, t]);
+  }, [isAuthenticated, t]);
 
   return { isLoading, paths };
 }

@@ -222,16 +222,16 @@ LESSON_TRANSLATIONS = {
         },
         "quiz_intro": {
             **LESSON["quiz_intro"],
-            "eyebrow": "دانشت را امتحان کن",
+            "eyebrow": "دانشت را بسنج",
             "title": "آزمون: Cross-Site Scripting",
-            "summary": "با این آزمون کوتاه مطمئن شو نکته‌های اصلی را گرفته‌ای.",
+            "summary": "با این آزمون کوتاه مطمئن شو مفهوم Cross-Site Scripting را درست گرفته‌ای.",
             "start_button": "شروع آزمون",
-            "review_button": "یک بار دیگر مطالب را مرور کن ←",
+            "review_button": "یک بار دیگر راهنما را مرور کن ←",
         },
         "quiz": {
             **LESSON["quiz"],
             "title": "آزمون Cross-Site Scripting",
-            "instructions": "با این آزمون کوتاه مطمئن شو نکته‌های اصلی را گرفته‌ای.",
+            "instructions": "با این آزمون کوتاه مطمئن شو مفهوم Cross-Site Scripting را درست گرفته‌ای.",
             "questions": [
                 {
                     **LESSON["quiz"]["questions"][0],
@@ -502,7 +502,7 @@ GUIDE_TRANSLATIONS = {
                 **GUIDE["code_samples"]["quiz_cta"],
                 "eyebrow": "یاد گرفتی؟",
                 "label": "آزمون:",
-                "summary": "یک آزمون کوتاه بده تا مطمئن شوی نکته‌ها را خوب گرفته‌ای ←",
+                "summary": "با یک آزمون کوتاه مطمئن شو مفهوم Cross-Site Scripting را درست گرفته‌ای ←",
             },
         },
     }

@@ -1,4 +1,5 @@
-import { FiBarChart2, FiShield, FiZap } from "react-icons/fi";
+import { GiCutDiamond, GiRank3 } from "react-icons/gi";
+import { FiShield } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 import { Card, Skeleton } from "../UI";
@@ -100,14 +101,16 @@ function ProfileLevelCard() {
 
           <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:w-[22rem]">
             <LevelStatCard
-              icon={FiZap}
+              icon={GiCutDiamond}
               label={t("profile.xp")}
+              tone="xp"
               value={profile.totalXp}
               suffix="XP"
             />
             <LevelStatCard
-              icon={FiBarChart2}
+              icon={GiRank3}
               label={t("profile.levelProgress")}
+              tone="progress"
               value={progressPercent}
               suffix="%"
             />
@@ -159,7 +162,12 @@ function LevelHexBadge({ level, style }) {
   );
 }
 
-function LevelStatCard({ icon: Icon, label, value, suffix }) {
+function LevelStatCard({ icon: Icon, label, tone = "xp", value, suffix }) {
+  const toneClasses =
+    tone === "progress"
+      ? "from-indigo-400 to-violet-600 shadow-violet-500/15"
+      : "from-cyan-300 to-blue-600 shadow-cyan-500/15";
+
   return (
     <div className="rounded-2xl border border-border bg-surface/80 p-4 shadow-sm shadow-black/5">
       <div className="flex items-center justify-between gap-3">
@@ -170,8 +178,17 @@ function LevelStatCard({ icon: Icon, label, value, suffix }) {
             <span className="ms-1 text-xs font-bold text-text-muted">{suffix}</span>
           </p>
         </div>
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <Icon className="h-5 w-5" aria-hidden="true" />
+        <div
+          className={classNames(
+            "relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg",
+            toneClasses
+          )}
+        >
+          <div
+            className="absolute inset-1.5 rounded-xl bg-white/20"
+            aria-hidden="true"
+          />
+          <Icon className="relative h-5 w-5 stroke-[2.4]" aria-hidden="true" />
         </div>
       </div>
     </div>

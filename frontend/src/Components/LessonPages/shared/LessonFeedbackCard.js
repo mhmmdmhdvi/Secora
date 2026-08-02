@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FiCheckCircle, FiMessageSquare, FiStar, FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -11,7 +11,6 @@ import { classNames } from "../../UI/classNames";
 const DIFFICULTY_OPTIONS = ["too_easy", "just_right", "too_hard"];
 
 function LessonFeedbackCard({
-  autoOpen = false,
   lessonSlug,
   showTrigger = true,
   source = "quiz",
@@ -26,12 +25,6 @@ function LessonFeedbackCard({
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    if (autoOpen && isAuthenticated && !submitted) {
-      setIsOpen(true);
-    }
-  }, [autoOpen, isAuthenticated, submitted]);
-
   if (!lessonSlug) {
     return null;
   }
@@ -43,6 +36,37 @@ function LessonFeedbackCard({
     }
 
     setIsOpen(true);
+  }
+
+  async function handleHelpfulFeedback() {
+    if (!isAuthenticated) {
+      toast.info(t("feedback.loginRequired"));
+      return;
+    }
+
+    if (isSubmitting || submitted) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await saveLessonFeedback(
+        lessonSlug,
+        {
+          rating: 5,
+          difficulty: "just_right",
+          comment: "",
+          source,
+        },
+        { locale: language }
+      );
+      setSubmitted(true);
+    } catch {
+      toast.error(t("feedback.saveFailed"));
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function closeFeedback() {
@@ -83,14 +107,45 @@ function LessonFeedbackCard({
   return (
     <>
       {showTrigger && (
-        <button
-          type="button"
-          onClick={openFeedback}
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition hover:border-primary/50 hover:text-primary sm:w-auto"
-        >
-          <FiMessageSquare className="h-4 w-4" aria-hidden="true" />
-          {submitted ? t("feedback.editButton") : t("feedback.openButton")}
-        </button>
+        <div className="mx-auto mt-8 w-full max-w-xl rounded-2xl border border-border bg-surface p-5 text-start shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                {t("feedback.eyebrow")}
+              </p>
+              <h3 className="mt-2 text-lg font-black text-text">
+                {submitted ? t("feedback.thanksTitle") : t("feedback.promptTitle")}
+              </h3>
+              <p className="mt-1 text-sm leading-6 text-text-muted">
+                {submitted
+                  ? t("feedback.thanksDescription")
+                  : t("feedback.promptDescription")}
+              </p>
+            </div>
+
+            {!submitted && (
+              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={handleHelpfulFeedback}
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-text-inverted transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {t("feedback.helpfulButton")}
+                </button>
+                <button
+                  type="button"
+                  onClick={openFeedback}
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-muted px-4 py-2.5 text-sm font-bold text-text transition hover:border-primary/50 hover:text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <FiMessageSquare className="h-4 w-4" aria-hidden="true" />
+                  {t("feedback.needsWorkButton")}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {isOpen && (

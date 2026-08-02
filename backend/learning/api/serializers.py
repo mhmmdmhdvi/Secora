@@ -230,6 +230,7 @@ def serialize_unlocked_achievement(achievement):
         "code": achievement.code,
         "icon": meta.get("icon", "award"),
         "category": meta.get("category", "completion"),
-        "lessonSlug": achievement.lesson_slug,
+        "lessonSlug": achievement.lesson_slug or meta.get("lesson_slug", ""),
+        "isAvailable": True,
         "unlockedAt": achievement.unlocked_at,
     }

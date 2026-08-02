@@ -61,6 +61,20 @@ const lessonComponents = {
   "dom-based-xss-quiz-start": lazy(() =>
     import("./dom-based-xss/DomBasedXssQuizStart")
   ),
+  "xml-external-entities": lazy(() =>
+    import("./xml-external-entities/XmlExternalEntities")
+  ),
+  "xml-external-entities-guide": lazy(() =>
+    import(
+      "./xml-external-entities/xml-external-entities-guide/XmlExternalEntitiesGuide"
+    )
+  ),
+  "xml-external-entities-quiz": lazy(() =>
+    import("./xml-external-entities/XmlExternalEntitiesQuiz")
+  ),
+  "xml-external-entities-quiz-start": lazy(() =>
+    import("./xml-external-entities/XmlExternalEntitiesQuizStart")
+  ),
 };
 
 export default lessonComponents;

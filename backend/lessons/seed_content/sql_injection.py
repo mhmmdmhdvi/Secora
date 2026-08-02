@@ -373,16 +373,16 @@ FA_LESSON = {
     ],
     "quiz_intro": {
         **LESSON["quiz_intro"],
-        "eyebrow": "دانشت را امتحان کن",
+        "eyebrow": "دانشت را بسنج",
         "title": "آزمون: SQL Injection",
-        "summary": "با این آزمون کوتاه مطمئن شو نکته‌های اصلی را گرفته‌ای.",
+        "summary": "با این آزمون کوتاه مطمئن شو مفهوم SQL Injection را درست گرفته‌ای.",
         "start_button": "شروع آزمون",
-        "review_button": "یک بار دیگر مطالب را مرور کن ←",
+        "review_button": "یک بار دیگر راهنما را مرور کن ←",
     },
     "quiz": {
         **LESSON["quiz"],
         "title": "آزمون: SQL Injection",
-        "instructions": "با این آزمون کوتاه مطمئن شو نکته‌های اصلی را گرفته‌ای.",
+        "instructions": "با این آزمون کوتاه مطمئن شو مفهوم SQL Injection را درست گرفته‌ای.",
         "questions": [
             {
                 "key": "orm-immunity",

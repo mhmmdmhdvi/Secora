@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import domXssGif from "../../../assets/lessons/DOM-based-XSS.gif";
 import haxxedGif from "../../../assets/lessons/haxxed.gif";
 import malPensive from "../../../assets/lessons/mal-pensive.png";
 import malSucceed from "../../../assets/lessons/mal-succeed.png";
@@ -203,6 +202,8 @@ function MalPayloadScene({ attack, code }) {
 }
 
 function HackedScene({ attack }) {
+  const isPersian = containsPersian(attack.hacked_title || attack.hacked_message);
+
   return (
     <>
       <img
@@ -213,20 +214,34 @@ function HackedScene({ attack }) {
       <BrowserShell url={attack.hacked_url} className="sm:max-w-lg">
         <div className="bg-slate-950 p-5 text-center text-white sm:p-6">
           <img
-            src={haxxedGif || domXssGif}
+            src={haxxedGif}
             alt="Haxxed"
             className="mx-auto max-h-44 w-full max-w-sm object-contain"
           />
-          <h2 className="mt-4 font-mono text-2xl font-black text-red-300 sm:text-3xl">
+          <h2
+            dir={isPersian ? "rtl" : "ltr"}
+            className={`mt-4 text-2xl font-black text-red-300 sm:text-3xl ${
+              isPersian ? "font-sans" : "font-mono"
+            }`}
+          >
             {attack.hacked_title}
           </h2>
-          <p className="mx-auto mt-3 max-w-sm font-mono text-xs leading-6 text-slate-300 sm:text-sm">
+          <p
+            dir={isPersian ? "rtl" : "ltr"}
+            className={`mx-auto mt-3 max-w-sm text-xs leading-6 text-slate-300 sm:text-sm ${
+              isPersian ? "font-sans" : "font-mono"
+            }`}
+          >
             {attack.hacked_message}
           </p>
         </div>
       </BrowserShell>
     </>
   );
+}
+
+function containsPersian(text = "") {
+  return /[\u0600-\u06FF]/.test(text);
 }
 
 export default DomBasedXssScene;

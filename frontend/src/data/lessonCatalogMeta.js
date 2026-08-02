@@ -4,6 +4,7 @@ const READY_LESSONS = new Set([
   "cross-site-scripting",
   "reflected-xss",
   "dom-based-xss",
+  "xml-external-entities",
 ]);
 
 const PREVIEW_LESSONS = new Set([]);

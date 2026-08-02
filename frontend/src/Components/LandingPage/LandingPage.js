@@ -3,7 +3,6 @@ import TerminalBox from "./TerminalBox";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
-import ContinueLearningPanel from "./ContinueLearningPanel";
 import LandingFooter from "./LandingFooter";
 
 function LandingPage() {
@@ -56,7 +55,6 @@ function LandingPage() {
           </div>
         </div>
       </section>
-      <ContinueLearningPanel />
       <LandingFooter />
     </div>
   );
