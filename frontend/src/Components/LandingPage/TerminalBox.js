@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const TERMINAL_LINES = [
-  { text: "Initializing SecureLearn Data Harvester...", color: "#8be9fd" },
+  { text: "Initializing Secora Data Harvester...", color: "#8be9fd" },
   { text: "Connecting to target -> vuln.site:443", color: "#f1fa8c" },
   { text: "Running vulnerability scan...", color: "#8be9fd" },
   { text: "[+] Port 80 open", color: "#50fa7b" },

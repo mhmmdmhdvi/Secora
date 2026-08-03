@@ -1,6 +1,6 @@
-# SecureLearn
+# Secora
 
-SecureLearn is a bilingual, interactive web-security learning application with a
+Secora is a bilingual, interactive web-security learning application with a
 React frontend and a Django REST backend.
 
 ## Backend setup
@@ -17,7 +17,7 @@ The backend requires Python 3.14 and PostgreSQL. SQLite is not supported.
 `DATABASE_URL` must use a PostgreSQL URL, for example:
 
 ```text
-postgresql://securelearn:password@127.0.0.1:5432/securelearn
+postgresql://secora:password@127.0.0.1:5432/secora
 ```
 
 Production must set `DJANGO_SETTINGS_MODULE=config.settings.production`, use a

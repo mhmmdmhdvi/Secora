@@ -1,4 +1,4 @@
-# SecureLearn Production Roadmap
+# Secora Production Roadmap
 
 > Architecture audit and implementation plan, prepared 2026-07-21 and revised 2026-07-22. Implementation has started; completed checklist items reflect the working tree.
 
@@ -6,7 +6,7 @@
 
 ### Executive summary
 
-SecureLearn is a promising frontend-heavy prototype, but it is not yet production-ready. The strongest part is the visual, step-based lesson concept. The largest risks are production settings committed in insecure form, fragile browser-side authentication, absent automated tests, duplicated lesson/quiz presentation, and a catalog that advertises substantially more content than the router can render.
+Secora is a promising frontend-heavy prototype, but it is not yet production-ready. The strongest part is the visual, step-based lesson concept. The largest risks are production settings committed in insecure form, fragile browser-side authentication, absent automated tests, duplicated lesson/quiz presentation, and a catalog that advertises substantially more content than the router can render.
 
 The audit found an active SQLite configuration and an older hard-coded PostgreSQL configuration in Git. The project decision is now **PostgreSQL in every environment**. Database credentials must come from environment variables; SQLite is not a supported runtime fallback. The existing `backend/db.sqlite3` is a legacy local artifact and must be retained only until its data is inspected or migrated.
 
@@ -26,7 +26,7 @@ Observed verification baseline:
 Current shape:
 
 ```text
-SecureLearn/
+Secora/
 ├── backend/
 │   ├── config/                 # Django project settings and root URLs
 │   ├── accounts/               # Registration and account mutation APIs
@@ -144,7 +144,7 @@ backend/
 
 ### Database review
 
-PostgreSQL is the required database for development, testing, staging, and production. This gives SecureLearn one set of query semantics and lets development and CI exercise the same constraints, transactions, indexes, full-text search, and `jsonb` behavior used in production. It also avoids discovering PostgreSQL-only migration or collation problems at deployment time.
+PostgreSQL is the required database for development, testing, staging, and production. This gives Secora one set of query semantics and lets development and CI exercise the same constraints, transactions, indexes, full-text search, and `jsonb` behavior used in production. It also avoids discovering PostgreSQL-only migration or collation problems at deployment time.
 
 The costs are a local service/container and slightly slower test setup. Those costs are justified because lesson publishing, concurrent progress writes, multilingual search, analytics, backup/restore, and future reporting all benefit from PostgreSQL. Tests should use a disposable PostgreSQL database, with test workers creating isolated databases as needed.
 
@@ -261,7 +261,7 @@ Architecture decision: use a small `ThemeProvider` with explicit `light | dark` 
 
 Resolution order:
 
-1. Explicit saved preference from `localStorage` (`securelearn.theme`) if it is `light` or `dark`.
+1. Explicit saved preference from `localStorage` (`secora.theme`) if it is `light` or `dark`.
 2. Otherwise use `light`.
 3. Apply the resolved `dark` class, `data-theme`, and `color-scheme` to `<html>`.
 4. Run a tiny inline pre-paint script in `public/index.html` to avoid a flash of the wrong theme.
@@ -283,7 +283,7 @@ Animation rules: transition only color/background/border over roughly 150–200 
 
 ## Persian/English localization plan
 
-Use `i18next` + `react-i18next`: its hooks, namespaces, interpolation/pluralization, lazy resource loading, and language-change rerenders fit this React application (<https://react.i18next.com/latest>). Default to `fa`, support `en`, and persist the explicit choice as `securelearn.language`. Do not automatically override the required Persian default from browser locale; browser detection can be offered only as a one-time suggestion.
+Use `i18next` + `react-i18next`: its hooks, namespaces, interpolation/pluralization, lazy resource loading, and language-change rerenders fit this React application (<https://react.i18next.com/latest>). Default to `fa`, support `en`, and persist the explicit choice as `secora.language`. Do not automatically override the required Persian default from browser locale; browser detection can be offered only as a one-time suggestion.
 
 Proposed files:
 

@@ -85,6 +85,10 @@ function buildCrumbs(pathname, t, isPersian) {
     return [{ label: t("nav.profile") }];
   }
 
+  if (pathname === "/about") {
+    return [{ label: t("nav.about") }];
+  }
+
   const lessonMatch = pathname.match(/^\/lessons\/([^/]+)/);
   if (lessonMatch) {
     const rawSlug = lessonMatch[1];
@@ -113,7 +117,7 @@ export function useCurrentBreadcrumbLabel() {
   const isPersian = language === "fa";
   const crumbs = buildCrumbs(location.pathname, t, isPersian);
 
-  if (!crumbs.length) return "SecureLearn";
+  if (!crumbs.length) return "Secora";
 
   return crumbs.map((crumb) => crumb.label).join(isPersian ? " ‹ " : " › ");
 }

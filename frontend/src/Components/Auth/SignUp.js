@@ -82,7 +82,7 @@ function SignUp() {
   return (
     <div className="min-h-screen bg-app flex items-start justify-center px-4 pt-24 sm:pt-28">
       <Card className="w-full max-w-md border-2 border-border p-6 sm:p-8 md:p-10">
-        <h1 className="text-3xl font-bold text-center mb-6">SecureLearn</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">Secora</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Field

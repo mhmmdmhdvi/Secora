@@ -12,11 +12,13 @@ function LandingFooter() {
         { label: t("nav.lessons"), to: "/lessons" },
         { label: t("nav.paths"), to: "/paths" },
         { label: t("nav.profile"), to: "/profile" },
+        { label: t("nav.about"), to: "/about" },
       ]
     : [
         { label: t("nav.lessons"), to: "/lessons" },
         { label: t("nav.login"), to: "/login" },
         { label: t("auth.signUp"), to: "/signup" },
+        { label: t("nav.about"), to: "/about" },
       ];
 
   return (
@@ -27,11 +29,8 @@ function LandingFooter() {
             to="/"
             className="text-lg font-bold tracking-tight text-text hover:text-primary"
           >
-            SecureLearn
+            Secora
           </Link>
-          <p className="mt-1 max-w-md text-sm leading-6 text-text-muted">
-            {t("footer.tagline")}
-          </p>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">

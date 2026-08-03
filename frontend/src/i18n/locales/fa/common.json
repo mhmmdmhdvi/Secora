@@ -1,12 +1,13 @@
 {
   "app": {
-    "name": "SecureLearn",
-    "loading": "در حال بارگذاری SecureLearn"
+    "name": "Secora",
+    "loading": "در حال بارگذاری Secora"
   },
   "nav": {
     "home": "خانه",
     "lessons": "درس‌ها",
     "paths": "مسیرها",
+    "about": "درباره",
     "profile": "پروفایل",
     "login": "ورود",
     "logout": "خروج",
@@ -22,9 +23,8 @@
     "browseLessons": "دیدن همه درس‌ها"
   },
   "footer": {
-    "tagline": "درس‌های مینیمال و تعاملی برای تمرین آرام و پیوسته کدنویسی امن.",
     "navigation": "ناوبری پایین صفحه",
-    "copyright": "© {{year}} SecureLearn"
+    "copyright": "© {{year}} Secora"
   },
   "auth": {
     "username": "نام کاربری",

@@ -1,12 +1,13 @@
 {
   "app": {
-    "name": "SecureLearn",
-    "loading": "Loading SecureLearn"
+    "name": "Secora",
+    "loading": "Loading Secora"
   },
   "nav": {
     "home": "Home",
     "lessons": "Lessons",
     "paths": "Paths",
+    "about": "About",
     "profile": "Profile",
     "login": "Login",
     "logout": "Logout",
@@ -22,9 +23,8 @@
     "browseLessons": "Browse All Lessons"
   },
   "footer": {
-    "tagline": "Minimal, hands-on secure coding lessons built for steady practice.",
     "navigation": "Footer navigation",
-    "copyright": "© {{year}} SecureLearn"
+    "copyright": "© {{year}} Secora"
   },
   "auth": {
     "username": "Username",
@@ -54,7 +54,7 @@
   },
   "profile": {
     "appearance": "Appearance",
-    "appearanceDescription": "Choose how SecureLearn looks on this device.",
+    "appearanceDescription": "Choose how Secora looks on this device.",
     "theme": "Theme",
     "language": "Language",
     "password": "Password",

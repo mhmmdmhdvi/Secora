@@ -11,6 +11,7 @@ const LandingPage = lazy(() => import("./Components/LandingPage/LandingPage"));
 const LessonsPage = lazy(() => import("./Components/LessonsPage/LessonsPage"));
 const LessonLoader = lazy(() => import("./Components/LessonPages/LessonLoader"));
 const LearningPathsPage = lazy(() => import("./Components/LearningPaths/LearningPathsPage"));
+const AboutPage = lazy(() => import("./Components/About/AboutPage"));
 const Login = lazy(() => import("./Components/Auth/Login"));
 const SignUp = lazy(() => import("./Components/Auth/SignUp"));
 const Profile = lazy(() => import("./Components/Profile/Profile"));
@@ -35,6 +36,7 @@ function AppRoutes() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/lessons" element={<LessonsPage />} />
           <Route path="/lessons/:slug" element={<LessonLoader />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route
             path="/paths"
             element={

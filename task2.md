@@ -1,4 +1,4 @@
-# SecureLearn Engagement Roadmap
+# Secora Engagement Roadmap
 
 This file orders the engagement ideas from easiest/highest-value to hardest/later.
 
@@ -44,7 +44,7 @@ For SQL Injection:
 
 ## Phase 1: Give The Website Memory
 
-These are the most important first features. They make SecureLearn remember the user.
+These are the most important first features. They make Secora remember the user.
 
 ### Idea 1: Real Progress Tracking
 
@@ -504,7 +504,7 @@ Do not add:
 - forced daily pressure
 - visual clutter
 
-SecureLearn should feel focused, smart, and rewarding.
+Secora should feel focused, smart, and rewarding.
 
 ## Best First Implementation Slice
 

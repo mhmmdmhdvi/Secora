@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
-const THEME_STORAGE_KEY = "securelearn.theme";
+const THEME_STORAGE_KEY = "secora.theme";
 const THEME_OPTIONS = ["light", "dark"];
 
 export const ThemeContext = createContext(null);

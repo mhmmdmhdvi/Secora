@@ -74,7 +74,7 @@ def seed_user(username):
     User = get_user_model()
     user, created = User.objects.get_or_create(
         username=username,
-        defaults={"email": f"{username}@securelearn.local"},
+        defaults={"email": f"{username}@secora.local"},
     )
     if created:
         user.set_unusable_password()

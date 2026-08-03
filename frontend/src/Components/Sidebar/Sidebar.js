@@ -57,7 +57,7 @@ function Sidebar({
         {/* Top */}
         <div className="flex h-[72px] items-center justify-between border-b border-border px-3">
           {(!collapsed || mobileSidebarOpen) && (
-            <h1 className="text-lg font-bold text-text">SecureLearn</h1>
+            <h1 className="text-lg font-bold text-text">Secora</h1>
           )}
 
           {/* Desktop collapse button */}

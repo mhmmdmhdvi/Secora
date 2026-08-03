@@ -14,7 +14,7 @@ function Header() {
               to="/"
               className="text-lg md:text-xl font-bold text-text no-underline whitespace-nowrap"
             >
-              SecureLearn
+              Secora
             </Link>
 
             <nav className="flex items-center gap-4 md:gap-6 min-w-0">
